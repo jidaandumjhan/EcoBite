@@ -1,0 +1,49 @@
+# -------------------------
+# Python
+# -------------------------
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# -------------------------
+# Virtual Environment
+# -------------------------
+.venv/
+env/
+venv/
+
+# -------------------------
+# Environment Variables
+# -------------------------
+.env
+.env.*
+
+# -------------------------
+# Logs & databases
+# -------------------------
+*.log
+*.sqlite3
+
+# -------------------------
+# Uploads (ignore real files but keep folder)
+# -------------------------
+uploads/*
+!uploads/.gitkeep
+
+# -------------------------
+# IDE / Editor
+# -------------------------
+.vscode/
+.idea/
+*.swp
+
+# -------------------------
+# OS-specific files
+# -------------------------
+.DS_Store
+Thumbs.db
