@@ -1,13 +1,112 @@
+/* General styles */
 body {
   font-family: Arial, sans-serif;
-  margin: 2rem;
-  background-color: #f9fff9;
+  margin: 0;
+  padding: 0;
+  background: #f6fef9;
+  color: #333;
 }
 
-h1 {
-  color: green;
+/* Navbar */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #16a34a;
+  padding: 10px 20px;
+  color: white;
+}
+.nav h1 { margin: 0; }
+
+/* Main content */
+.content, .form-container {
+  max-width: 600px;
+  margin: 20px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-p {
-  color: #444;
+/* Cards */
+.card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  background: #f9f9f9;
 }
+
+/* Buttons */
+button, .btn-primary, .btn-secondary {
+  display: inline-block;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-primary {
+  background: #16a34a;
+  color: white;
+}
+.btn-primary:hover { background: #0f8a3d; }
+
+.btn-secondary {
+  background: #fff;
+  color: #16a34a;
+  border: 2px solid #16a34a;
+}
+.btn-secondary:hover {
+  background: #e6f5ec;
+}
+
+/* Forms */
+form {
+  display: grid;
+  gap: 12px;
+}
+input, select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+/* Post list */
+.post-list {
+  margin-top: 15px;
+}
+
+/* Flash messages */
+.flash-messages {
+  margin: 10px 0;
+}
+
+.flash {
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.flash.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.flash.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+.flash.info {
+  background-color: #e0f2fe;
+  color: #075985;
+  border: 1px solid #3b82f6;
+}
+

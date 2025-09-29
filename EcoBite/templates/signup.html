@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - EcoBite</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Create an Account</h2>
+
+    <!-- 🔹 Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- 🔹 Signup Form -->
+    <form method="POST" action="{{ url_for('signup_post') }}">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+      <label for="role">Account Type</label>
+      <select id="role" name="role" required>
+        <option value="user">Individual</option>
+        <option value="store">Business / Store</option>
+      </select>
+
+      <button type="submit" class="btn-primary">Sign Up</button>
+    </form>
+
+    <p style="margin-top: 1rem;">Already have an account?  
+      <a href="{{ url_for('login') }}">Login here</a>
+    </p>
+  </div>
+</body>
+</html>

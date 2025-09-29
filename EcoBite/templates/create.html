@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Post - EcoBite</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+  <div class="nav">
+    <h1>🌱 EcoBite</h1>
+    <a href="{{ url_for('home') }}" class="btn-secondary">Back to Home</a>
+  </div>
+
+  <div class="form-container">
+    <h2>Create a Food Post</h2>
+    <form method="POST" action="{{ url_for('create') }}" enctype="multipart/form-data">
+      <label for="description">Description</label>
+      <input type="text" id="description" name="description" placeholder="e.g. 2 pizza slices" required>
+
+      <label for="expiry_time">Expiry Time (minutes)</label>
+      <input type="number" id="expiry_time" name="expiry_time" placeholder="20" required>
+
+      <label for="photo">Upload Photo</label>
+      <input type="file" id="photo" name="photo">
+
+      <button type="submit" class="btn-primary">Post</button>
+    </form>
+  </div>
+</body>
+</html>
