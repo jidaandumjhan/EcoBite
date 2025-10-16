@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoBite • Login</title>
+  <link rel="stylesheet" href="../CSS/style.css" />
+  <style>
+    .center {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: linear-gradient(180deg, #f7fbf9, #eaf8f0);
+    }
+    .auth {
+      max-width: 460px;
+      width: 100%;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      padding: 36px 32px;
+      text-align: center;
+    }
+    .auth .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .auth h2 {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+      color: #16351f;
+    }
+    .auth p.sub {
+      margin: 0 0 24px;
+      color: #5b6d5b;
+    }
+    .form {
+      display: grid;
+      gap: 14px;
+      text-align: left;
+    }
+    label {
+      font-size: 0.95rem;
+      color: #234a2f;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #e6efe8;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.2s;
+    }
+    input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(28, 164, 74, 0.15);
+    }
+    button {
+      background: var(--brand);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: 0.25s;
+    }
+    button:hover {
+      background: var(--brand-2);
+      transform: translateY(-2px);
+    }
+    .link {
+      color: var(--brand);
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="center">
+    <div class="auth">
+      <div class="brand">
+        <div class="logo">🌿</div>
+        <div class="title">
+          <h1 style="font-size:1.2rem;margin:0;">EcoBite</h1>
+          <p style="margin:0;font-size:0.85rem;color:#5b6d5b;">Share Food, Save Waste.</p>
+        </div>
+      </div>
+
+      <h2>Welcome Back!</h2>
+      <p class="sub">Sign in to start sharing and saving food 🌱</p>
+
+      <form id="loginForm" class="form">
+        <div>
+          <label for="lemail">Email</label>
+          <input type="email" id="lemail" required placeholder="you@example.com" />
+        </div>
+        <div>
+          <label for="lpass">Password</label>
+          <input type="password" id="lpass" required placeholder="••••••••" />
+        </div>
+        <button type="submit">Sign In</button>
+      </form>
+
+      <p style="margin-top:16px;">
+        Don’t have an account?
+        <a href="signup.html" class="link">Sign up</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Prevent redirect loop
+    if (localStorage.getItem("eco_loggedIn") === "1") {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("lemail").value.trim();
+      const pass = document.getElementById("lpass").value.trim();
+
+      if (!email || !pass) {
+        alert("Please enter both email and password.");
+        return;
+      }
+
+      // Save basic login state
+      localStorage.setItem("eco_loggedIn", "1");
+      localStorage.setItem("eco_userEmail", email);
+
+      // Redirect to main dashboard
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

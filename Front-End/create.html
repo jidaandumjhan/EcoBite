@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • Share Food</title>
+  <link rel="stylesheet" href="../CSS/style.css"/>
+  <script type="module">
+    import { bindCreate } from "../js/app.js";
+    window.addEventListener("DOMContentLoaded", bindCreate);
+  </script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar"></aside>
+
+    <main>
+      <div class="header">
+        <div>
+          <h2>Share Food</h2>
+          <p>Help reduce waste and feed your community 🌱</p>
+        </div>
+      </div>
+
+      <section class="panel">
+        <form class="form" id="createForm">
+          <div>
+            <label>What are you sharing? *</label>
+            <textarea name="title" placeholder="e.g., Fresh sandwiches, Leftover pizza" required></textarea>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Category *</label>
+              <select name="category" required>
+                <option>Meals</option><option>Snacks</option><option>Beverages</option>
+                <option>Baked Goods</option><option>Fruits</option><option selected>Other</option>
+              </select>
+            </div>
+            <div>
+              <label>Quantity</label>
+              <input name="qty" placeholder="e.g., 2 slices, 1 bowl, 500g…"/>
+            </div>
+          </div>
+
+          <div>
+  <label>Dietary Info</label>
+  
+  <div class="checks">
+    <label class="chk"><input type="checkbox" name="diet" value="Vegetarian"> Vegetarian</label>
+    <label class="chk"><input type="checkbox" name="diet" value="Vegan"> Vegan</label>
+    <label class="chk"><input type="checkbox" name="diet" value="Gluten-Free"> Gluten-Free</label>
+    <label class="chk"><input type="checkbox" name="diet" value="Dairy-Free"> Dairy-Free</label>
+    <label class="chk"><input type="checkbox" name="diet" value="Nut-Free"> Nut-Free</label>
+    <label class="chk"><input type="checkbox" name="diet" value="Halal"> Halal</label>
+    <label class="chk"><input type="checkbox" name="diet" value="Kosher"> Kosher</label>
+  </div>
+</div>
+
+
+          <div class="row">
+            <div>
+              <label>Location *</label>
+              <input name="location" placeholder="e.g., Study café" required/>
+            </div>
+            <div>
+              <label>Expires At *</label>
+              <input type="datetime-local" name="expires" required/>
+            </div>
+          </div>
+
+          <div>
+            <label>Photo (optional)</label>
+            <input type="file" name="photo" accept="image/*"/>
+          </div>
+
+          <div style="display:flex; gap:10px">
+            <button class="btn ghost" type="button" onclick="history.back()">Cancel</button>
+            <button class="btn primary" type="submit">Post Food</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    fetch('shared-sidebar.html').then(r=>r.text()).then(h=>{document.querySelector('.sidebar').outerHTML=h})
+      .then(()=> import('../js/app.js').then(m => m.navActivate('create')));
+  </script>
+</body>
+</html>

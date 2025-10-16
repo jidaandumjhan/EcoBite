@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • Food Feed</title>
+  <link rel="stylesheet" href="../CSS/style.css"/>
+  <script>
+  // Only send first-time users to welcome
+  const loggedIn = localStorage.getItem('eco_loggedIn') === '1';
+  const onboarded = localStorage.getItem('eco_onboarded') === '1';
+  if (!loggedIn && !onboarded) {
+    // First visit → go to welcome screen
+    window.location.replace('welcome.html');
+  }
+</script>
+
+  <script type="module">
+    import { renderFeed } from "../js/app.js";
+    window.addEventListener("DOMContentLoaded", renderFeed);
+  </script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar"></aside>
+
+    <main>
+      <div class="header">
+        <div>
+          <h2>Food Feed</h2>
+          <p>Discover and share free food with your campus community 🌍</p>
+        </div>
+      </div>
+
+      <section class="stats">
+        <div class="stat"><h4>Available Now</h4><div class="big" id="stAvailable">0</div></div>
+        <div class="stat"><h4>Successfully Shared</h4><div class="big" id="stShared">0</div></div>
+        <div class="stat"><h4>Total Posts</h4><div class="big" id="stTotal">0</div></div>
+        <div class="stat"><h4>Food Waste Prevented</h4><div class="big" id="stWaste">0kg</div></div>
+      </section>
+
+      <div class="toolbar">
+        <div class="tabs">
+          <button class="tab active" data-scope="available">Available</button>
+          <button class="tab" data-scope="claimed">Claimed</button>
+          <button class="tab" data-scope="expired">Expired</button>
+        </div>
+        <input class="input" id="search" placeholder="Search for food (e.g., pizza, salad, cookies…)" />
+        <select class="select" id="type">
+          <option value="all">All Types</option>
+          <option>Meals</option><option>Snacks</option><option>Beverages</option><option>Baked Goods</option><option>Fruits</option><option>Other</option>
+        </select>
+        <select class="select" id="sort">
+          <option value="new">Newest First</option>
+          <option value="near">Closest to Me</option>
+        </select>
+        <button class="chip" id="dietBtn">🥒 Dietary</button>
+      </div>
+
+      <section id="feed" class="grid"></section>
+      <div class="empty" id="emptyFeed" style="display:none">
+        <div class="logo" style="width:64px;height:64px;font-size:26px;margin:0 auto 10px">🌿</div>
+        <h3>No posts yet</h3>
+        <p>Be the first to share food and reduce waste!</p>
+      </div>
+
+      <p class="footer-note">Prototype UI — works with LocalStorage until backend is wired.</p>
+    </main>
+  </div>
+
+  <script>
+    fetch('shared-sidebar.html').then(r=>r.text()).then(h=>{document.querySelector('.sidebar').outerHTML=h})
+      .then(()=> import('../js/app.js').then(m => m.navActivate('home')));
+  </script>
+</body>
+</html>

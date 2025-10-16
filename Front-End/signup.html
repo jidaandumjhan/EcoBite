@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • Sign up</title>
+  <link rel="stylesheet" href="../CSS/style.css"/>
+  <style>.center{min-height:100vh; display:grid; place-items:center; padding:24px}.auth{max-width:520px; width:100%; background:var(--panel); border-radius:20px; box-shadow:var(--shadow); padding:30px}</style>
+</head>
+<body>
+  <div class="center">
+    <div class="auth">
+      <div class="brand" style="padding:0 0 10px 0">
+        <div class="logo">🌿</div><div class="title"><h1>EcoBite</h1><p>Share Food, Save Waste.</p></div>
+      </div>
+      <h2 style="margin:0 0 6px 0">Join EcoBite</h2>
+      <p style="margin:0 0 18px 0; color:var(--muted)">Share Food, Save Waste.</p>
+
+      <form class="form" onsubmit="event.preventDefault(); signup()">
+        <div><label>Email</label><input id="semail" type="email" required/></div>
+        <div><label>Password</label><input id="spass" type="password" required/></div>
+        <div>
+          <label>Account Type</label><br/>
+          <label><input type="radio" name="role" value="individual" checked/> Individual</label>
+          <label style="margin-left:12px"><input type="radio" name="role" value="business"/> Business/Store</label>
+        </div>
+        <button class="btn primary" type="submit">Create Account</button>
+      </form>
+
+      <p style="margin-top:12px">Already have an account? <a href="login.html">Sign in</a></p>
+    </div>
+  </div>
+
+  <script>
+    function signup(){
+      const email=document.getElementById('semail').value.trim();
+      localStorage.setItem('ecobite_user', JSON.stringify({name:'Eco Member', email}));
+      location.href='index.html';
+    }
+  </script>
+</body>
+</html>

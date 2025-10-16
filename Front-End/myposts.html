@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • My Posts</title>
+  <link rel="stylesheet" href="../CSS/style.css"/>
+  <script type="module">
+    import { renderMyPosts } from "../js/app.js";
+    window.addEventListener("DOMContentLoaded", renderMyPosts);
+  </script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar"></aside>
+
+    <main>
+      <div class="header">
+        <div>
+          <h2>My Posts</h2>
+          <p>Manage your food listings and approve claims</p>
+        </div>
+      </div>
+
+      <section id="myPosts" class="grid"></section>
+      <div class="empty" id="emptyMine" style="display:none">
+        <div class="logo" style="width:64px;height:64px;font-size:26px;margin:0 auto 10px">📦</div>
+        <h3>No posts yet</h3>
+        <p>Start sharing food to see your posts here.</p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    fetch('shared-sidebar.html').then(r=>r.text()).then(h=>{document.querySelector('.sidebar').outerHTML=h})
+      .then(()=> import('../js/app.js').then(m => m.navActivate('myposts')));
+  </script>
+</body>
+</html>
