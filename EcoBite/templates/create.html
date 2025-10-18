@@ -1,31 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Post - EcoBite</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • Share Food</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
 </head>
 <body>
-  <div class="nav">
-    <h1>🌱 EcoBite</h1>
-    <a href="{{ url_for('home') }}" class="btn-secondary">Back to Home</a>
+  <div class="app">
+    {% include 'shared-sidebar.html' %}
+
+    <main>
+      <div class="header">
+        <div>
+          <h2>Share Food</h2>
+          <p>Help reduce waste and feed your community 🌱</p>
+        </div>
+      </div>
+
+      <section class="panel">
+        <form class="form" id="createForm" action="{{ url_for('create') }}" method="post">
+          <div>
+            <label>Description *</label>
+            <textarea name="description" placeholder="e.g., Fresh sandwiches, Leftover pizza" required></textarea>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Expiry (minutes) *</label>
+              <input type="number" name="expiry_time" min="1" required />
+            </div>
+            <div>
+              <label>Quantity</label>
+              <input name="qty" placeholder="e.g., 2 slices, 500g…" />
+            </div>
+          </div>
+
+          <div>
+            <label>Location *</label>
+            <input name="location" required />
+          </div>
+
+          <div style="display:flex; gap:10px">
+            <button class="btn ghost" type="button" onclick="history.back()">Cancel</button>
+            <button class="btn primary" type="submit">Post Food</button>
+          </div>
+        </form>
+      </section>
+    </main>
   </div>
 
-  <div class="form-container">
-    <h2>Create a Food Post</h2>
-    <form method="POST" action="{{ url_for('create') }}" enctype="multipart/form-data">
-      <label for="description">Description</label>
-      <input type="text" id="description" name="description" placeholder="e.g. 2 pizza slices" required>
-
-      <label for="expiry_time">Expiry Time (minutes)</label>
-      <input type="number" id="expiry_time" name="expiry_time" placeholder="20" required>
-
-      <label for="photo">Upload Photo</label>
-      <input type="file" id="photo" name="photo">
-
-      <button type="submit" class="btn-primary">Post</button>
-    </form>
-  </div>
+  <script type="module">
+    import { bindCreate, navActivate } from "{{ url_for('static', filename='js/app.js') }}";
+    window.addEventListener('DOMContentLoaded', () => {
+      bindCreate?.();
+      navActivate?.('create');
+    });
+  </script>
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </body>
 </html>

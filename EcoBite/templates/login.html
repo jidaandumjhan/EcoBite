@@ -1,40 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - EcoBite</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoBite • Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
 </head>
+
 <body>
-  <div class="form-container">
-    <h2>Login</h2>
-
-    <!-- 🔹 Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flash-messages">
-          {% for category, message in messages %}
-            <div class="flash {{ category }}">{{ message }}</div>
-          {% endfor %}
+  <div class="center">
+    <div class="auth">
+      <div class="brand">
+        <div class="logo">🌿</div>
+        <div class="title">
+          <h1>EcoBite</h1>
+          <p>Share Food, Save Waste.</p>
         </div>
-      {% endif %}
-    {% endwith %}
+      </div>
 
-    <!-- 🔹 Login Form -->
-    <form method="POST" action="{{ url_for('login_post') }}">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      <h2>Welcome Back!</h2>
+      <p class="sub">Sign in to start sharing and saving food 🌱</p>
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      <form action="{{ url_for('login_post') }}" method="post" class="form">
+        <div>
+          <label>Email</label>
+          <input name="email" type="email" required placeholder="you@example.com">
+        </div>
+        <div>
+          <label>Password</label>
+          <input name="password" type="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn primary">Sign In</button>
+      </form>
 
-      <button type="submit" class="btn-primary">Login</button>
-    </form>
-
-    <p style="margin-top: 1rem;">Don’t have an account?  
-      <a href="{{ url_for('signup') }}">Sign up here</a>
-    </p>
+      <p style="margin-top:16px;">
+        Don’t have an account?
+        <a href="{{ url_for('signup') }}" class="link">Sign up</a>
+      </p>
+    </div>
   </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </body>
 </html>

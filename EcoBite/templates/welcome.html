@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoBite • Welcome</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
+</head>
+
+<body class="landing">
+  <section class="hero">
+    <div class="hero-content">
+      <h1>🌿 Welcome to EcoBite</h1>
+      <p>
+        EcoBite is a food-sharing platform that helps reduce food waste
+        and connect people with free, delicious meals nearby.
+      </p>
+      <a class="hero-btn" href="{{ url_for('login') }}">Get Started</a>
+    </div>
+    <img src="{{ url_for('static', filename='images/hero-image.png') }}" alt="EcoBite landing hero image" />
+  </section>
+
+  <section class="section" id="about">
+    <h2>Why Choose EcoBite?</h2>
+    <div class="cards">
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/save-food.png') }}" alt="Save Food" />
+        <h3>Save Food</h3>
+        <p>Share leftover meals or claim available ones around you.</p>
+      </div>
+
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/connect-community.png') }}" alt="Connect Community" />
+        <h3>Connect with Community</h3>
+        <p>Build bridges between students, cafes, and locals.</p>
+      </div>
+
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/carbon-safe.png') }}" alt="Reduce Carbon Footprint" />
+        <h3>Reduce Carbon Footprint</h3>
+        <p>Every kilogram of food saved prevents CO₂ emissions.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 <strong>EcoBite</strong> — Share. Save. Sustain. 🌱
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+</body>
+</html>

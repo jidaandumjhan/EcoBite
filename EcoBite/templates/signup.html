@@ -1,46 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - EcoBite</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • Sign up</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
+
+  <style>
+    .center { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+    .auth { max-width: 520px; width: 100%; background: var(--panel); border-radius: 20px; box-shadow: var(--shadow); padding: 30px; }
+  </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Create an Account</h2>
-
-    <!-- 🔹 Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flash-messages">
-          {% for category, message in messages %}
-            <div class="flash {{ category }}">{{ message }}</div>
-          {% endfor %}
+  <div class="center">
+    <div class="auth">
+      <div class="brand" style="padding:0 0 10px 0">
+        <div class="logo">🌿</div>
+        <div class="title">
+          <h1>EcoBite</h1>
+          <p>Share Food, Save Waste.</p>
         </div>
-      {% endif %}
-    {% endwith %}
+      </div>
 
-    <!-- 🔹 Signup Form -->
-    <form method="POST" action="{{ url_for('signup_post') }}">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      <h2 style="margin:0 0 6px 0">Join EcoBite</h2>
+      <p style="margin:0 0 18px 0; color:var(--muted)">Share Food, Save Waste.</p>
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      <!-- ✅ Flask form -->
+      <form class="form" action="{{ url_for('signup_post') }}" method="post">
+        <div>
+          <label>Email</label>
+          <input name="email" type="email" required />
+        </div>
+        <div>
+          <label>Password</label>
+          <input name="password" type="password" required />
+        </div>
+        <div>
+          <label>Account Type</label><br/>
+          <label><input type="radio" name="role" value="individual" checked /> Individual</label>
+          <label style="margin-left:12px">
+            <input type="radio" name="role" value="business" /> Business/Store
+          </label>
+        </div>
+        <button class="btn primary" type="submit">Create Account</button>
+      </form>
 
-      <label for="role">Account Type</label>
-      <select id="role" name="role" required>
-        <option value="user">Individual</option>
-        <option value="store">Business / Store</option>
-      </select>
-
-      <button type="submit" class="btn-primary">Sign Up</button>
-    </form>
-
-    <p style="margin-top: 1rem;">Already have an account?  
-      <a href="{{ url_for('login') }}">Login here</a>
-    </p>
+      <!-- ✅ use Flask link -->
+      <p style="margin-top:12px">
+        Already have an account?
+        <a href="{{ url_for('login') }}">Sign in</a>
+      </p>
+    </div>
   </div>
+
+  <!-- ✅ optional JS (if needed later for UX) -->
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </body>
 </html>

@@ -1,52 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoBite - Home</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • Food Feed</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
 </head>
 <body>
-  <div class="nav">
-    <h1>🌱 EcoBite</h1>
-    <form method="post" action="{{ url_for('logout') }}">
-      <button type="submit" class="btn-secondary">Logout</button>
-    </form>
-  </div>
+  <div class="app">
+    {% include 'shared-sidebar.html' %}
 
-  <div class="content">
-    <!-- 🔹 Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flash-messages">
-          {% for category, message in messages %}
-            <div class="flash {{ category }}">{{ message }}</div>
-          {% endfor %}
+    <main>
+      <div class="header">
+        <div>
+          <h2>Food Feed</h2>
+          <p>Discover and share free food with your campus community 🌍</p>
         </div>
-      {% endif %}
-    {% endwith %}
+      </div>
 
-    <!-- 🔹 Welcome -->
-    <h2>Welcome, {{ email }}</h2>
-    <p>You’re logged in as <strong>{{ role }}</strong>.</p>
+      <!-- Stats row from the original design -->
+      <section class="stats">
+        <div class="stat"><h4>Available Now</h4><div class="big" id="stAvailable">0</div></div>
+        <div class="stat"><h4>Successfully Shared</h4><div class="big" id="stShared">0</div></div>
+        <div class="stat"><h4>Total Posts</h4><div class="big" id="stTotal">0</div></div>
+        <div class="stat"><h4>Food Waste Prevented</h4><div class="big" id="stWaste">0kg</div></div>
+      </section>
 
-    <a href="{{ url_for('create') }}" class="btn-primary">+ Create New Post</a>
+      <!-- Toolbar / filters -->
+      <div class="toolbar">
+        <div class="tabs">
+          <button class="tab active" data-scope="available">Available</button>
+          <button class="tab" data-scope="claimed">Claimed</button>
+          <button class="tab" data-scope="expired">Expired</button>
+        </div>
+        <input class="input" id="search" placeholder="Search for food (e.g., pizza, salad, cookies…)" />
+        <select class="select" id="type">
+          <option value="all">All Types</option>
+          <option>Meals</option><option>Snacks</option><option>Beverages</option>
+          <option>Baked Goods</option><option>Fruits</option><option>Other</option>
+        </select>
+        <select class="select" id="sort">
+          <option value="new">Newest First</option>
+          <option value="near">Closest to Me</option>
+        </select>
+        <button class="chip" id="dietBtn">🥒 Dietary</button>
+      </div>
 
-    <!-- 🔹 Post List -->
-    <h3 style="margin-top: 2rem;">Available Food Posts</h3>
-    <div class="post-list">
-      {% if posts %}
+      <!-- Feed grid: you can leave to JS to render OR prefill from Flask posts -->
+      <section id="feed" class="grid">
         {% for post in posts %}
           <div class="card">
-            <h4>{{ post['description'] }}</h4>
-            <p>Expiry: {{ post['expiry_time'] }}</p>
-            <p>Status: {{ post['status'] }}</p>
+            <h3>{{ post.description }}</h3>
+            <p>Status: {{ post.status }}</p>
+            <small>Expires in {{ post.expiry_minutes }} mins</small>
           </div>
         {% endfor %}
-      {% else %}
-        <p>No posts yet. Create one above!</p>
-      {% endif %}
-    </div>
+      </section>
+
+      <div class="empty" id="emptyFeed" style="{% if posts %}display:none{% else %}display:block{% endif %}">
+        <div class="logo" style="width:64px;height:64px;font-size:26px;margin:0 auto 10px">🌿</div>
+        <h3>No posts yet</h3>
+        <p>Be the first to share food and reduce waste!</p>
+      </div>
+
+      <p class="footer-note">Prototype UI — integrates with backend as we wire endpoints.</p>
+    </main>
   </div>
+
+  <!-- Import your module from /static correctly -->
+  <script type="module">
+    import { renderFeed, navActivate } from "{{ url_for('static', filename='js/app.js') }}";
+    window.addEventListener('DOMContentLoaded', () => {
+      // If renderFeed populates from API/localStorage, let it run:
+      renderFeed?.();
+      navActivate?.('home');
+    });
+  </script>
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </body>
 </html>

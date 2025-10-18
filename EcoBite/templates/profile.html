@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • Profile</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
+</head>
+<body>
+  <div class="app">
+    {% include 'shared-sidebar.html' %}
+
+    <main>
+      <div class="header">
+        <div>
+          <h2>My Profile</h2>
+          <p>Manage your EcoBite account and impact</p>
+        </div>
+      </div>
+
+      <section class="panel">
+        <h3>Account</h3>
+        <p><strong>Email:</strong> {{ session.get('email') }}</p>
+        <p><strong>Role:</strong> {{ session.get('role') }}</p>
+
+        <form action="{{ url_for('logout') }}" method="post" style="margin-top:12px">
+          <button class="btn primary" type="submit">Log Out</button>
+        </form>
+      </section>
+
+      <!-- Gamification / Impact -->
+      <section class="panel" style="margin-top:16px">
+        <h3>Your Impact</h3>
+        <div class="stats">
+          <div class="stat"><h4>Meals Shared</h4><div class="big" id="pfMeals">0</div></div>
+          <div class="stat"><h4>Meals Claimed</h4><div class="big" id="pfClaims">0</div></div>
+          <div class="stat"><h4>CO₂ Saved</h4><div class="big" id="pfCO2">0kg</div></div>
+          <div class="stat"><h4>Streak</h4><div class="big" id="pfStreak">0d</div></div>
+        </div>
+
+        <h4 style="margin-top:16px">Badges</h4>
+        <div class="grid">
+          <div class="card-soft">🥇 Starter Saver</div>
+          <div class="card-soft">🥈 Community Helper</div>
+          <div class="card-soft">🏆 Waste Warrior</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module">
+    import { navActivate } from "{{ url_for('static', filename='js/app.js') }}";
+    window.addEventListener('DOMContentLoaded', () => navActivate?.('profile'));
+    // If you plan to fetch real stats later, hook here.
+  </script>
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+</body>
+</html>
