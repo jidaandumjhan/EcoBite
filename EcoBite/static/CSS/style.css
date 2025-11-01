@@ -257,6 +257,27 @@ label.chk input[type="checkbox"]{
   .row{ grid-template-columns: 1fr; }
 }
 
+/* Dietary Popup */
+.diet-popup{
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  padding: 16px;
+  min-width: 240px;
+  z-index: 1000;
+  border: 1px solid #e6efe8;
+}
+
+.diet-popup strong{
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 14px;
+}
+
 /* ================================
    EcoBite — Landing (Welcome) Page
    Scope: body.landing …

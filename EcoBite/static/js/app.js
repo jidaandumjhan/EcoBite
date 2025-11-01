@@ -29,6 +29,20 @@ export async function renderFeed(){
     if(el) el.addEventListener('input', draw);
   });
 
+  // Dietary popup toggle
+  const dietBtn = byId('dietBtn');
+  const dietPopup = byId('dietPopup');
+  if(dietBtn && dietPopup){
+    dietBtn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      dietPopup.style.display = dietPopup.style.display === 'none' ? 'block' : 'none';
+    });
+    document.addEventListener('click', ()=>{
+      if(dietPopup) dietPopup.style.display = 'none';
+    });
+    if(dietPopup) dietPopup.addEventListener('click', (e)=> e.stopPropagation());
+  }
+
   draw();
 
   function draw(){
@@ -73,21 +87,10 @@ export async function renderFeed(){
 export function bindCreate(){
   hydrateUserOnSidebar();
   const form = byId('createForm');
-  form.addEventListener('submit', async e=>{
-    e.preventDefault();
-    const fd = new FormData(form);
-    const diet = fd.getAll('diet');
-    const data = {
-      title: fd.get('title').trim(),
-      category: fd.get('category'),
-      qty: fd.get('qty'),
-      diet,
-      location: fd.get('location').trim(),
-      expires: fd.get('expires')
-    };
-    await createPost(data);
-    location.href = 'index.html';
-  });
+  if(form){
+    // Let form submit naturally to Flask backend
+    // No need to prevent default or use API
+  }
 }
 
 /* ---------- MY POSTS ---------- */
@@ -95,7 +98,7 @@ export async function renderMyPosts(){
   hydrateUserOnSidebar();
   const user = getUser();
   const list = (await listPosts()).filter(p=>p.ownerEmail===user.email);
-  const wrap = byId('myPosts');
+  const wrap = byId('mypostsGrid');
   wrap.innerHTML = '';
   list.forEach(p=>{
     const pending = p.claims.filter(c=>c.status==='pending');
@@ -107,7 +110,7 @@ export async function renderMyPosts(){
       ]) : null
     }));
   });
-  byId('emptyMine').style.display = list.length ? 'none' : 'block';
+  byId('emptyMyPosts').style.display = list.length ? 'none' : 'block';
 }
 
 /* ---------- REQUESTS ---------- */
@@ -139,11 +142,63 @@ export async function renderRequests(){
   });
 }
 
+/* ---------- CLAIMS (requests on my posts) ---------- */
+export async function renderClaims(){
+  hydrateUserOnSidebar();
+  const user = getUser();
+  const list = (await listPosts());
+
+  const pending = [];
+  const history = [];
+  list.forEach(p=>{
+    if(p.ownerEmail===user.email){
+      p.claims.forEach(c=>{
+        const item = {...p, _claim:c};
+        (c.status==='pending' ? pending : history).push(item);
+      });
+    }
+  });
+
+  const pWrap = byId('claimsActive');
+  if(pWrap){
+    pWrap.innerHTML='';
+    if(pending.length === 0){
+      pWrap.innerHTML = '<p class="muted">No pending claims</p>';
+    } else {
+      pending.forEach(p=>{
+        const actionButtons = buttons([
+          {label:'Approve', type:'primary', click:()=>approveClaim(p.id, p._claim.id).then(()=>location.reload())}, 
+          {label:'Reject', click:()=>rejectClaim(p.id, p._claim.id).then(()=>location.reload())}
+        ]);
+        const badge = tag('span','badge','⏳ Pending');
+        const wrapper = tag('div');
+        wrapper.appendChild(badge);
+        wrapper.appendChild(actionButtons);
+        pWrap.appendChild(card(p, { extra: wrapper }));
+      });
+    }
+  }
+
+  const hWrap = byId('claimsHistory');
+  if(hWrap){
+    hWrap.innerHTML='';
+    if(history.length === 0){
+      hWrap.innerHTML = '<p class="muted">No claim history</p>';
+    } else {
+      history.forEach(p=>{
+        const status = p._claim.status==='approved' ? '✅ Approved' : '❌ Rejected';
+        hWrap.appendChild(card(p, { extra: tag('span','badge',status) }));
+      });
+    }
+  }
+}
+
 /* ---------- PROFILE ---------- */
 export async function renderProfile(){
   hydrateUserOnSidebar();
   const user = getUser();
-  set('#pfName', user.name || 'Eco Member'); set('#pfEmail', user.email);
+  set('#sbUser', user.name || user.email.split('@')[0] || 'Eco Member');
+  set('#sbEmail', user.email);
 
   const { shared, savedKg, list } = computeStats();
   const mine = list.filter(p=>p.ownerEmail===user.email);
@@ -153,13 +208,18 @@ export async function renderProfile(){
   set('#kStreak', '0 days');
   set('#impactCO2', `${savedKg} kg`);
   set('#impactMeals', shared);
+  set('#actPosts', mine.length);
+  set('#actClaims', shared);
+  set('#actClaimed', list.filter(p=>p.claims.some(c=>c.byEmail===user.email && c.status==='approved')).length);
 
   const pts = mine.length*10 + shared*20; // pretend point model
   set('#levelPts', `${pts} total points`);
-  byId('levelBar').style.width = Math.min(100, (pts/50)*100) + '%';
-
-  const act = byId('pfActivity'); act.innerHTML='';
-  mine.slice(0,4).forEach(p=> act.appendChild(card(p)));
+  set('#levelProgress', `${pts}/50 pts`);
+  const levelBar = byId('levelBar');
+  if(levelBar) levelBar.style.width = Math.min(100, (pts/50)*100) + '%';
+  
+  const achProgress = Math.min(10, Math.floor(mine.length / 3) + Math.floor(shared / 2));
+  set('#achProgress', `${achProgress}/10`);
 }
 
 /* ---------- small UI helpers ---------- */
@@ -168,14 +228,14 @@ function card(p, opts={}){
   const t = tag('div','thumb','🍱'); root.appendChild(t);
   const body = tag('div'); root.appendChild(body);
 
-  const title = tag('h5',null,p.title || '(no title)'); body.appendChild(title);
+  const title = tag('h5',null,p.title || p.description || '(no title)'); body.appendChild(title);
   const meta = tag('div','meta',[
-    `Category: ${p.category}`, `Qty: ${p.qty||'-'}`, `Location: ${p.location||'-'}`,
-    `Expires: ${formatDT(p.expires)}`
+    `Category: ${p.category||'Other'}`, `Qty: ${p.qty||'-'}`, `Location: ${p.location||'-'}`,
+    `Expires: ${formatDT(p.expires || p.expires_at)}`
   ].join(' • ')); body.appendChild(meta);
 
   if(opts.showOwner){
-    body.appendChild(tag('div','badge',`👤 ${p.ownerName || p.ownerEmail}`));
+    body.appendChild(tag('div','badge',`👤 ${p.ownerName || p.ownerEmail || 'Unknown'}`));
   }
 
   const row = tag('div','actions'); body.appendChild(row);

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoBite • Share Food, Save Waste</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
+</head>
+<body>
+  <div style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 24px; background:radial-gradient(1200px 600px at 70% -10%, #eaf9f0, transparent), radial-gradient(900px 500px at -10% 110%, #ecf9ef, transparent), var(--bg)">
+    
+    <!-- Logo & Branding -->
+    <div style="text-align:center; margin-bottom:48px">
+      <div style="width:80px; height:80px; border-radius:24px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); display:inline-grid; place-items:center; color:white; font-size:40px; font-weight:700; box-shadow:0 12px 32px rgba(28,164,74,.3); margin-bottom:24px">
+        🌿
+      </div>
+      <h1 style="margin:0 0 12px; font-size:48px; font-weight:800; color:var(--text); letter-spacing:-1px; line-height:1.1">
+        EcoBite
+      </h1>
+      <p style="margin:0; font-size:20px; color:var(--muted); font-weight:500">
+        Share. Save. Sustain.
+      </p>
+    </div>
+
+    <!-- Tagline -->
+    <div style="max-width:640px; text-align:center; margin-bottom:48px">
+      <p style="margin:0; font-size:22px; color:var(--text); line-height:1.6; font-weight:400">
+        Reduce food waste and connect with your community by sharing surplus meals
+      </p>
+    </div>
+
+    <!-- CTA Button -->
+    <a href="{{ url_for('get_started') }}" 
+       style="display:inline-block; padding:18px 48px; font-size:18px; font-weight:700; background:var(--brand); color:white; border:none; border-radius:16px; cursor:pointer; text-decoration:none; box-shadow:0 12px 28px rgba(28,164,74,.25); transition:all .3s ease"
+       onmouseover="this.style.background='var(--brand-2)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 16px 36px rgba(28,164,74,.35)'"
+       onmouseout="this.style.background='var(--brand)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 12px 28px rgba(28,164,74,.25)'">
+      Get Started →
+    </a>
+
+    <!-- Features Preview -->
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:32px; max-width:900px; width:100%; margin-top:80px">
+      <div style="text-align:center; padding:24px">
+        <div style="font-size:36px; margin-bottom:16px">🍱</div>
+        <h3 style="margin:0 0 8px; font-size:18px; color:var(--text); font-weight:600">Share Food</h3>
+        <p style="margin:0; font-size:14px; color:var(--muted); line-height:1.5">Post surplus meals and help reduce waste</p>
+      </div>
+      <div style="text-align:center; padding:24px">
+        <div style="font-size:36px; margin-bottom:16px">🌱</div>
+        <h3 style="margin:0 0 8px; font-size:18px; color:var(--text); font-weight:600">Save Planet</h3>
+        <p style="margin:0; font-size:14px; color:var(--muted); line-height:1.5">Every meal shared prevents CO₂ emissions</p>
+      </div>
+      <div style="text-align:center; padding:24px">
+        <div style="font-size:36px; margin-bottom:16px">👥</div>
+        <h3 style="margin:0 0 8px; font-size:18px; color:var(--text); font-weight:600">Build Community</h3>
+        <p style="margin:0; font-size:14px; color:var(--muted); line-height:1.5">Connect with neighbors and local businesses</p>
+      </div>
+    </div>
+
+  </div>
+
+  <style>
+    @media (max-width: 768px) {
+      div[style*="grid-template-columns:repeat(3"] {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+      }
+    }
+  </style>
+</body>
+</html>
+

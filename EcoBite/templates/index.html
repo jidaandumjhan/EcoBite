@@ -19,52 +19,91 @@
         </div>
       </div>
 
-      <!-- Stats row from the original design -->
+      <!-- Stats row -->
       <section class="stats">
-        <div class="stat"><h4>Available Now</h4><div class="big" id="stAvailable">0</div></div>
-        <div class="stat"><h4>Successfully Shared</h4><div class="big" id="stShared">0</div></div>
-        <div class="stat"><h4>Total Posts</h4><div class="big" id="stTotal">0</div></div>
-        <div class="stat"><h4>Food Waste Prevented</h4><div class="big" id="stWaste">0kg</div></div>
+        <div class="stat">
+          <h4>📦 Available Now</h4>
+          <div class="big" id="stAvailable">0</div>
+        </div>
+        <div class="stat">
+          <h4>👥 Successfully Shared</h4>
+          <div class="big" id="stShared">0</div>
+        </div>
+        <div class="stat">
+          <h4>📊 Total Posts</h4>
+          <div class="big" id="stTotal">0</div>
+        </div>
+        <div class="stat">
+          <h4>🌿 Food Waste Prevented</h4>
+          <div class="big" id="stWaste">0kg</div>
+        </div>
       </section>
 
       <!-- Toolbar / filters -->
       <div class="toolbar">
         <div class="tabs">
-          <button class="tab active" data-scope="available">Available</button>
-          <button class="tab" data-scope="claimed">Claimed</button>
-          <button class="tab" data-scope="expired">Expired</button>
+          <button class="tab active" data-scope="available">⭐ Available</button>
+          <button class="tab" data-scope="claimed">🏆 Claimed</button>
+          <button class="tab" data-scope="expired">⏰ Expired</button>
         </div>
-        <input class="input" id="search" placeholder="Search for food (e.g., pizza, salad, cookies…)" />
+        <input class="input" id="search" placeholder="🔍 Search for food (e.g., pizza, salad, cookies…)"/>
         <select class="select" id="type">
           <option value="all">All Types</option>
-          <option>Meals</option><option>Snacks</option><option>Beverages</option>
-          <option>Baked Goods</option><option>Fruits</option><option>Other</option>
+          <option value="Meals">Meals</option>
+          <option value="Snacks">Snacks</option>
+          <option value="Beverages">Beverages</option>
+          <option value="Baked Goods">Baked Goods</option>
+          <option value="Fruits">Fruits</option>
+          <option value="Other">Other</option>
         </select>
         <select class="select" id="sort">
           <option value="new">Newest First</option>
           <option value="near">Closest to Me</option>
         </select>
-        <button class="chip" id="dietBtn">🥒 Dietary</button>
+        <button class="chip" id="dietBtn" style="position:relative">🥒 Dietary</button>
+        <div id="dietPopup" class="diet-popup" style="display:none">
+          <strong>Dietary Preferences</strong>
+          <div class="checks" style="margin-top:12px; flex-direction:column; gap:8px">
+            <label class="chk">
+              <input type="checkbox" name="dietFilter" value="Vegetarian" />
+              <span>🥬 Vegetarian</span>
+            </label>
+            <label class="chk">
+              <input type="checkbox" name="dietFilter" value="Vegan" />
+              <span>🌱 Vegan</span>
+            </label>
+            <label class="chk">
+              <input type="checkbox" name="dietFilter" value="Gluten-Free" />
+              <span>🌾 Gluten-Free</span>
+            </label>
+            <label class="chk">
+              <input type="checkbox" name="dietFilter" value="Dairy-Free" />
+              <span>🥛 Dairy-Free</span>
+            </label>
+            <label class="chk">
+              <input type="checkbox" name="dietFilter" value="Nut-Free" />
+              <span>🥜 Nut-Free</span>
+            </label>
+            <label class="chk">
+              <input type="checkbox" name="dietFilter" value="Halal" />
+              <span>🌙 Halal</span>
+            </label>
+            <label class="chk">
+              <input type="checkbox" name="dietFilter" value="Kosher" />
+              <span>✡️ Kosher</span>
+            </label>
+          </div>
+        </div>
       </div>
 
-      <!-- Feed grid: you can leave to JS to render OR prefill from Flask posts -->
-      <section id="feed" class="grid">
-        {% for post in posts %}
-          <div class="card">
-            <h3>{{ post.description }}</h3>
-            <p>Status: {{ post.status }}</p>
-            <small>Expires in {{ post.expiry_minutes }} mins</small>
-          </div>
-        {% endfor %}
-      </section>
+      <!-- Feed grid -->
+      <section id="feed" class="grid"></section>
 
-      <div class="empty" id="emptyFeed" style="{% if posts %}display:none{% else %}display:block{% endif %}">
+      <div class="empty" id="emptyFeed" style="display:none">
         <div class="logo" style="width:64px;height:64px;font-size:26px;margin:0 auto 10px">🌿</div>
         <h3>No posts yet</h3>
         <p>Be the first to share food and reduce waste!</p>
       </div>
-
-      <p class="footer-note">Prototype UI — integrates with backend as we wire endpoints.</p>
     </main>
   </div>
 

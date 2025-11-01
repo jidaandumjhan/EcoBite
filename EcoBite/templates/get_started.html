@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoBite • Get Started</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
+</head>
+<body>
+  <div style="min-height:100vh; display:grid; place-items:center; padding:24px; background:radial-gradient(1200px 600px at 70% -10%, #eaf9f0, transparent), radial-gradient(900px 500px at -10% 110%, #ecf9ef, transparent), var(--bg)">
+    <div style="max-width:500px; width:100%">
+      
+      <!-- Header -->
+      <div style="text-align:center; margin-bottom:40px">
+        <a href="{{ url_for('landing') }}" style="text-decoration:none; color:var(--text)">
+          <div style="width:64px; height:64px; border-radius:20px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); display:inline-grid; place-items:center; color:white; font-size:32px; font-weight:700; box-shadow:0 8px 24px rgba(28,164,74,.25); margin-bottom:20px">
+            🌿
+          </div>
+        </a>
+        <h2 style="margin:0 0 8px; font-size:32px; color:var(--text); font-weight:700">Welcome to EcoBite</h2>
+        <p style="margin:0; font-size:16px; color:var(--muted)">Choose an option to continue</p>
+      </div>
+
+      <!-- Auth Options -->
+      <div style="display:grid; gap:16px; margin-bottom:24px">
+        <!-- Sign Up Card -->
+        <a href="{{ url_for('signup') }}" 
+           style="display:block; padding:24px; background:var(--panel); border:2px solid var(--brand-soft); border-radius:20px; text-decoration:none; transition:all .2s; box-shadow:0 4px 12px rgba(20, 83, 45, .06)"
+           onmouseover="this.style.borderColor='var(--brand)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(20, 83, 45, .12)'"
+           onmouseout="this.style.borderColor='var(--brand-soft)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(20, 83, 45, .06)'">
+          <div style="display:flex; align-items:center; gap:16px">
+            <div style="width:48px; height:48px; border-radius:14px; background:var(--brand-soft); display:grid; place-items:center; font-size:24px; flex-shrink:0">
+              ✨
+            </div>
+            <div style="flex:1">
+              <h3 style="margin:0 0 4px; font-size:18px; color:var(--text); font-weight:700">Create Account</h3>
+              <p style="margin:0; font-size:14px; color:var(--muted)">Join EcoBite and start sharing food</p>
+            </div>
+            <div style="color:var(--brand); font-size:20px; font-weight:700">→</div>
+          </div>
+        </a>
+
+        <!-- Sign In Card -->
+        <a href="{{ url_for('login') }}" 
+           style="display:block; padding:24px; background:var(--panel); border:2px solid #e6efe8; border-radius:20px; text-decoration:none; transition:all .2s; box-shadow:0 4px 12px rgba(20, 83, 45, .06)"
+           onmouseover="this.style.borderColor='var(--brand)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(20, 83, 45, .12)'"
+           onmouseout="this.style.borderColor='#e6efe8'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(20, 83, 45, .06)'">
+          <div style="display:flex; align-items:center; gap:16px">
+            <div style="width:48px; height:48px; border-radius:14px; background:#f6faf7; display:grid; place-items:center; font-size:24px; flex-shrink:0">
+              🔑
+            </div>
+            <div style="flex:1">
+              <h3 style="margin:0 0 4px; font-size:18px; color:var(--text); font-weight:700">Sign In</h3>
+              <p style="margin:0; font-size:14px; color:var(--muted)">Already have an account? Log in</p>
+            </div>
+            <div style="color:var(--brand); font-size:20px; font-weight:700">→</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Back Link -->
+      <div style="text-align:center; margin-top:32px">
+        <a href="{{ url_for('landing') }}" 
+           style="color:var(--muted); font-size:14px; text-decoration:none; transition:color .2s"
+           onmouseover="this.style.color='var(--brand)'"
+           onmouseout="this.style.color='var(--muted)'">
+          ← Back to home
+        </a>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
+

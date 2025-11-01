@@ -19,40 +19,187 @@
         </div>
       </div>
 
-      <section class="panel">
-        <h3>Account</h3>
-        <p><strong>Email:</strong> {{ session.get('email') }}</p>
-        <p><strong>Role:</strong> {{ session.get('role') }}</p>
-
-        <form action="{{ url_for('logout') }}" method="post" style="margin-top:12px">
-          <button class="btn primary" type="submit">Log Out</button>
-        </form>
-      </section>
-
-      <!-- Gamification / Impact -->
-      <section class="panel" style="margin-top:16px">
-        <h3>Your Impact</h3>
-        <div class="stats">
-          <div class="stat"><h4>Meals Shared</h4><div class="big" id="pfMeals">0</div></div>
-          <div class="stat"><h4>Meals Claimed</h4><div class="big" id="pfClaims">0</div></div>
-          <div class="stat"><h4>CO₂ Saved</h4><div class="big" id="pfCO2">0kg</div></div>
-          <div class="stat"><h4>Streak</h4><div class="big" id="pfStreak">0d</div></div>
+      <!-- Profile Header Card -->
+      <section class="hero">
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px">
+          <div class="logo" style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;color:white;font-size:24px;font-weight:700">
+            {{ session.get('email', 'G')[0] | upper }}
+          </div>
+          <div>
+            <h3 style="margin:0; color:white; font-size:24px">{{ session.get('email', 'Guest').split('@')[0] | capitalize }}</h3>
+            <p style="margin:4px 0 0; color:rgba(255,255,255,.9); font-size:14px">{{ session.get('email', 'guest@example.com') }}</p>
+            <span style="display:inline-block; margin-top:8px; padding:4px 12px; background:rgba(255,255,255,.2); border-radius:999px; color:white; font-size:12px">Eco Member</span>
+          </div>
+        </div>
+        
+        <div style="margin-top:20px; padding-top:20px; border-top:1px solid rgba(255,255,255,.2)">
+          <div style="display:flex; justify-content:space-between; align-items:center">
+            <div>
+              <h4 style="margin:0 0 4px; color:white; font-size:14px; font-weight:600">About Me</h4>
+              <p style="margin:0; color:rgba(255,255,255,.8); font-size:13px">Share a bit about yourself and your sustainability journey!</p>
+            </div>
+            <button class="btn" style="background:rgba(255,255,255,.2); color:white; border:none">Edit</button>
+          </div>
         </div>
 
-        <h4 style="margin-top:16px">Badges</h4>
-        <div class="grid">
-          <div class="card-soft">🥇 Starter Saver</div>
-          <div class="card-soft">🥈 Community Helper</div>
-          <div class="card-soft">🏆 Waste Warrior</div>
+        <!-- Impact Overview Cards -->
+        <div class="kpis" style="margin-top:20px">
+          <div class="kpi">
+            <div style="font-size:12px; color:rgba(255,255,255,.8); margin-bottom:4px">Posts Shared</div>
+            <div class="n" id="kPosts" style="color:white">0</div>
+          </div>
+          <div class="kpi">
+            <div style="font-size:12px; color:rgba(255,255,255,.8); margin-bottom:4px">People Fed</div>
+            <div class="n" id="kFed" style="color:white">0</div>
+          </div>
+          <div class="kpi">
+            <div style="font-size:12px; color:rgba(255,255,255,.8); margin-bottom:4px">Food Saved</div>
+            <div class="n" id="kSaved" style="color:white">0.0kg</div>
+          </div>
+          <div class="kpi">
+            <div style="font-size:12px; color:rgba(255,255,255,.8); margin-bottom:4px">Current Streak</div>
+            <div class="n" id="kStreak" style="color:white">0 days</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Your Environmental Impact -->
+      <section class="panel" style="margin-top:16px; background:linear-gradient(135deg, var(--brand-soft), #e8f7ee)">
+        <h3 style="margin:0 0 12px; color:#0f7e39">Your Environmental Impact</h3>
+        <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap">
+          <div style="display:flex; align-items:center; gap:8px">
+            <span style="font-size:24px">🌿</span>
+            <div>
+              <div style="font-size:18px; font-weight:700; color:#0f7e39" id="impactCO2">0.0 kg</div>
+              <div style="font-size:12px; color:#0f7e39">CO₂ emissions prevented</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px">
+            <span style="font-size:24px">🍱</span>
+            <div>
+              <div style="font-size:18px; font-weight:700; color:#0f7e39" id="impactMeals">0</div>
+              <div style="font-size:12px; color:#0f7e39">Meals provided</div>
+            </div>
+          </div>
+        </div>
+        <p style="margin:12px 0 0; color:#115e2c; font-style:italic">Every meal shared is a step towards a sustainable future!</p>
+      </section>
+
+      <!-- Your Level -->
+      <section class="panel" style="margin-top:16px">
+        <h3 style="margin:0 0 12px">Your Level</h3>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px">
+          <span style="font-size:24px">🌱</span>
+          <div>
+            <div style="font-weight:700; font-size:16px">Seedling Level 1</div>
+            <div style="font-size:14px; color:var(--muted)" id="levelPts">0 total points</div>
+          </div>
+        </div>
+        <div style="margin-bottom:8px">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px">
+            <span style="font-size:12px; color:var(--muted)">Progress to Sprout</span>
+            <span style="font-size:12px; color:var(--muted)" id="levelProgress">0/50 pts</span>
+          </div>
+          <div style="height:8px; background:#e6efe8; border-radius:999px; overflow:hidden">
+            <div id="levelBar" style="height:100%; background:var(--brand); border-radius:999px; width:0%; transition:width .3s"></div>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-size:13px; color:var(--muted); margin-bottom:8px">How to earn points:</div>
+          <ul style="margin:0; padding-left:20px; font-size:13px; color:var(--muted)">
+            <li>+10 Share food</li>
+            <li>+20 Successful claim (your food gets taken)</li>
+            <li>+5 Claim food</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Recent Activity -->
+      <section class="panel" style="margin-top:16px">
+        <h3 style="margin:0 0 12px">Recent Activity</h3>
+        <div style="display:flex; flex-direction:column; gap:12px">
+          <div style="display:flex; align-items:center; gap:12px">
+            <span style="font-size:20px">📄</span>
+            <div style="flex:1">
+              <div style="font-weight:600">Food Posts</div>
+              <div style="font-size:12px; color:var(--muted)" id="actPosts">16</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px">
+            <span style="font-size:20px">✅</span>
+            <div style="flex:1">
+              <div style="font-weight:600">Successful Claims</div>
+              <div style="font-size:12px; color:var(--muted)" id="actClaims">0</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px">
+            <span style="font-size:20px">🍱</span>
+            <div style="flex:1">
+              <div style="font-weight:600">Food Claimed</div>
+              <div style="font-size:12px; color:var(--muted)" id="actClaimed">0</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Achievements -->
+      <section class="panel" style="margin-top:16px">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
+          <h3 style="margin:0">Achievements</h3>
+          <span style="font-size:12px; color:var(--muted)" id="achProgress">0/10</span>
+        </div>
+        <div class="grid" style="grid-template-columns:repeat(5, 1fr); gap:12px">
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">🌱</div>
+            <div style="font-size:12px; font-weight:600">First Share</div>
+          </div>
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">⭐</div>
+            <div style="font-size:12px; font-weight:600">Helpful Starter</div>
+          </div>
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">🌿</div>
+            <div style="font-size:12px; font-weight:600">Eco Warrior</div>
+          </div>
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">📅</div>
+            <div style="font-size:12px; font-weight:600">Consistent</div>
+          </div>
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">💚</div>
+            <div style="font-size:12px; font-weight:600">Generous Soul</div>
+          </div>
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">🏆</div>
+            <div style="font-size:12px; font-weight:600">Community Hero</div>
+          </div>
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">💪</div>
+            <div style="font-size:12px; font-weight:600">Mega Saver</div>
+          </div>
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">🔥</div>
+            <div style="font-size:12px; font-weight:600">Dedicated</div>
+          </div>
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">🥇</div>
+            <div style="font-size:12px; font-weight:600">Food Champion</div>
+          </div>
+          <div class="card-soft" style="text-align:center; padding:12px">
+            <div style="font-size:24px; margin-bottom:4px">🌟</div>
+            <div style="font-size:12px; font-weight:600">Legendary</div>
+          </div>
         </div>
       </section>
     </main>
   </div>
 
   <script type="module">
-    import { navActivate } from "{{ url_for('static', filename='js/app.js') }}";
-    window.addEventListener('DOMContentLoaded', () => navActivate?.('profile'));
-    // If you plan to fetch real stats later, hook here.
+    import { renderProfile, navActivate } from "{{ url_for('static', filename='js/app.js') }}";
+    window.addEventListener('DOMContentLoaded', () => {
+      renderProfile?.();
+      navActivate?.('profile');
+    });
   </script>
   <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </body>

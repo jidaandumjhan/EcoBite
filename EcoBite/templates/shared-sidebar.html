@@ -10,12 +10,12 @@
 
   <!-- ===== Navigation ===== -->
   <nav class="nav">
-    <a href="{{ url_for('home') }}">🏠 Home</a>
-    <a href="{{ url_for('create') }}">🍱 Share Food</a>
-    <a href="{{ url_for('myposts') }}">📦 My Posts</a>
-    <a href="{{ url_for('requests_page') }}">📬 Requests</a>
-    <a href="{{ url_for('claims') }}">📄 Claims</a>
-    <a href="{{ url_for('profile') }}">👤 Profile</a>
+    <a href="{{ url_for('home') }}" data-nav="home">🏠 Home</a>
+    <a href="{{ url_for('create') }}" data-nav="create">🍱 Share Food</a>
+    <a href="{{ url_for('myposts') }}" data-nav="myposts">📦 My Posts</a>
+    <a href="{{ url_for('requests_page') }}" data-nav="requests">📬 My Requests</a>
+    <a href="{{ url_for('claims') }}" data-nav="claims">📄 Claims</a>
+    <a href="{{ url_for('profile') }}" data-nav="profile">👤 Profile</a>
   </nav>
 
   <!-- ===== Impact Card ===== -->
@@ -28,13 +28,13 @@
 
   <!-- ===== User Info & Logout ===== -->
   <div style="margin-top:auto">
-    <div class="panel" style="display:flex; gap:10px; align-items:center">
-      <div class="logo" style="width:36px;height:36px;border-radius:10px;font-size:16px">
+    <div class="panel" style="display:flex; gap:10px; align-items:center; padding:12px">
+      <div class="logo" style="width:36px;height:36px;border-radius:50%;background:var(--brand-soft);color:var(--brand);font-size:16px;font-weight:700;display:grid;place-items:center">
         {{ session.get('email', 'G')[0] | upper }}
       </div>
-      <div style="font-size:14px">
-        <strong>{{ session.get('email', 'Guest') }}</strong><br>
-        <span class="muted" style="color:#6a7b6a">{{ session.get('role', 'visitor') | capitalize }}</span>
+      <div style="font-size:13px; flex:1">
+        <strong id="sbUser" style="display:block; color:var(--text)">{{ session.get('email', 'Guest').split('@')[0] | capitalize }}</strong>
+        <span class="muted" style="color:#6a7b6a; font-size:12px" id="sbEmail">{{ session.get('email', 'guest@example.com') }}</span>
       </div>
     </div>
 

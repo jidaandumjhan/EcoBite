@@ -66,8 +66,11 @@ export async function approveClaim(postId, claimId){
 export async function rejectClaim(postId, claimId){
   const list = readPosts();
   const p = list.find(x=>x.id===postId);
-  const c = p?.claims.find(c=>c.id===claimId);
-  if(c){ c.status='rejected'; writePosts(list); }
+  if(!p) throw new Error('Not found');
+  const c = p.claims.find(c=>c.id===claimId);
+  if(!c) throw new Error('Claim not found');
+  c.status = 'rejected';
+  writePosts(list);
   return p;
 }
 

@@ -1,61 +1,115 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>EcoBite • Sign up</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoBite • Sign Up</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
   <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
-
-  <style>
-    .center { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
-    .auth { max-width: 520px; width: 100%; background: var(--panel); border-radius: 20px; box-shadow: var(--shadow); padding: 30px; }
-  </style>
 </head>
 <body>
-  <div class="center">
-    <div class="auth">
-      <div class="brand" style="padding:0 0 10px 0">
-        <div class="logo">🌿</div>
-        <div class="title">
-          <h1>EcoBite</h1>
-          <p>Share Food, Save Waste.</p>
+  <div style="min-height:100vh; display:grid; place-items:center; padding:24px; background:radial-gradient(1200px 600px at 70% -10%, #eaf9f0, transparent), radial-gradient(900px 500px at -10% 110%, #ecf9ef, transparent), var(--bg)">
+    <div style="max-width:520px; width:100%; background:var(--panel); border-radius:24px; box-shadow:0 20px 40px rgba(20, 83, 45, .12); padding:40px">
+      <!-- Brand Section -->
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:32px; padding-bottom:24px; border-bottom:2px solid var(--brand-soft)">
+        <div style="width:56px; height:56px; border-radius:16px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); display:grid; place-items:center; color:white; font-size:28px; font-weight:700; box-shadow:0 8px 20px rgba(28,164,74,.3)">
+          🌿
+        </div>
+        <div>
+          <h1 style="margin:0; font-size:28px; color:var(--text); letter-spacing:-0.5px">EcoBite</h1>
+          <p style="margin:4px 0 0; font-size:14px; color:var(--muted)">Share. Save. Sustain.</p>
         </div>
       </div>
 
-      <h2 style="margin:0 0 6px 0">Join EcoBite</h2>
-      <p style="margin:0 0 18px 0; color:var(--muted)">Share Food, Save Waste.</p>
+      <h2 style="margin:0 0 8px; font-size:26px; color:var(--text)">Join EcoBite</h2>
+      <p style="margin:0 0 28px; color:var(--muted); font-size:15px">Start sharing food and building a sustainable community 🌱</p>
 
-      <!-- ✅ Flask form -->
-      <form class="form" action="{{ url_for('signup_post') }}" method="post">
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div style="margin-bottom:20px">
+            {% for category, message in messages %}
+              <div style="padding:12px 16px; border-radius:12px; margin-bottom:8px; font-size:14px; 
+                  {% if category == 'error' %}background:#fee; border:1px solid #fcc; color:#c33{% elif category == 'success' %}background:#efe; border:1px solid #cfc; color:#3c3{% else %}background:#eef; border:1px solid #ccf; color:#33c{% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form action="{{ url_for('signup_post') }}" method="post" style="display:grid; gap:20px">
         <div>
-          <label>Email</label>
-          <input name="email" type="email" required />
+          <label style="display:block; margin-bottom:8px; font-weight:600; color:var(--text); font-size:14px">Email Address</label>
+          <input name="email" type="email" required placeholder="you@example.com" 
+                 style="width:100%; padding:14px 16px; font-size:15px; border:2px solid #e6efe8; border-radius:14px; outline:none; background:white; transition:all .2s"
+                 onfocus="this.style.borderColor='var(--brand)'; this.style.boxShadow='0 0 0 4px rgba(28,164,74,.1)'"
+                 onblur="this.style.borderColor='#e6efe8'; this.style.boxShadow='none'">
         </div>
+        
         <div>
-          <label>Password</label>
-          <input name="password" type="password" required />
+          <label style="display:block; margin-bottom:8px; font-weight:600; color:var(--text); font-size:14px">Password</label>
+          <input name="password" type="password" required placeholder="Create a strong password" 
+                 style="width:100%; padding:14px 16px; font-size:15px; border:2px solid #e6efe8; border-radius:14px; outline:none; background:white; transition:all .2s"
+                 onfocus="this.style.borderColor='var(--brand)'; this.style.boxShadow='0 0 0 4px rgba(28,164,74,.1)'"
+                 onblur="this.style.borderColor='#e6efe8'; this.style.boxShadow='none'">
         </div>
+
         <div>
-          <label>Account Type</label><br/>
-          <label><input type="radio" name="role" value="individual" checked /> Individual</label>
-          <label style="margin-left:12px">
-            <input type="radio" name="role" value="business" /> Business/Store
-          </label>
+          <label style="display:block; margin-bottom:12px; font-weight:600; color:var(--text); font-size:14px">Account Type</label>
+          <div style="display:flex; gap:16px">
+            <label style="flex:1; padding:14px 16px; border:2px solid #e6efe8; border-radius:14px; cursor:pointer; transition:all .2s; background:white; display:flex; align-items:center; gap:10px"
+                   onmouseover="this.style.borderColor='var(--brand-soft)'"
+                   onmouseout="if(!this.querySelector('input:checked')) this.style.borderColor='#e6efe8'">
+              <input type="radio" name="role" value="user" checked style="accent-color:var(--brand); width:18px; height:18px; cursor:pointer"
+                     onchange="document.querySelectorAll('label[for^=role]').forEach(l=>{if(!l.querySelector('input:checked')) l.style.borderColor='#e6efe8'; l.style.background='white'}); this.closest('label').style.borderColor='var(--brand)'; this.closest('label').style.background='var(--brand-soft)'">
+              <div>
+                <div style="font-weight:600; font-size:14px; color:var(--text)">👤 Individual</div>
+                <div style="font-size:12px; color:var(--muted); margin-top:2px">Personal use</div>
+              </div>
+            </label>
+            <label style="flex:1; padding:14px 16px; border:2px solid #e6efe8; border-radius:14px; cursor:pointer; transition:all .2s; background:white; display:flex; align-items:center; gap:10px"
+                   onmouseover="this.style.borderColor='var(--brand-soft)'"
+                   onmouseout="if(!this.querySelector('input:checked')) this.style.borderColor='#e6efe8'">
+              <input type="radio" name="role" value="business" style="accent-color:var(--brand); width:18px; height:18px; cursor:pointer"
+                     onchange="document.querySelectorAll('label[for^=role]').forEach(l=>{if(!l.querySelector('input:checked')) l.style.borderColor='#e6efe8'; l.style.background='white'}); this.closest('label').style.borderColor='var(--brand)'; this.closest('label').style.background='var(--brand-soft)'">
+              <div>
+                <div style="font-weight:600; font-size:14px; color:var(--text)">🏪 Business</div>
+                <div style="font-size:12px; color:var(--muted); margin-top:2px">Store/Organization</div>
+              </div>
+            </label>
+          </div>
         </div>
-        <button class="btn primary" type="submit">Create Account</button>
+
+        <button type="submit" 
+                style="width:100%; padding:16px; font-size:16px; font-weight:700; background:var(--brand); color:white; border:none; border-radius:14px; cursor:pointer; transition:all .2s; box-shadow:0 8px 20px rgba(28,164,74,.25); margin-top:8px"
+                onmouseover="this.style.background='var(--brand-2)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 28px rgba(28,164,74,.3)'"
+                onmouseout="this.style.background='var(--brand)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(28,164,74,.25)'">
+          Create Account →
+        </button>
       </form>
 
-      <!-- ✅ use Flask link -->
-      <p style="margin-top:12px">
-        Already have an account?
-        <a href="{{ url_for('login') }}">Sign in</a>
-      </p>
+      <div style="margin-top:24px; padding-top:24px; border-top:2px solid var(--brand-soft); text-align:center">
+        <p style="margin:0; color:var(--muted); font-size:14px">
+          Already have an account?
+          <a href="{{ url_for('login') }}" style="color:var(--brand); font-weight:600; text-decoration:none; margin-left:4px">Sign in</a>
+        </p>
+      </div>
     </div>
   </div>
 
-  <!-- ✅ optional JS (if needed later for UX) -->
-  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+  <script>
+    // Update radio button styling on load
+    document.addEventListener('DOMContentLoaded', function() {
+      const radios = document.querySelectorAll('input[type="radio"][name="role"]');
+      radios.forEach(radio => {
+        if(radio.checked) {
+          const label = radio.closest('label');
+          label.style.borderColor = 'var(--brand)';
+          label.style.background = 'var(--brand-soft)';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
