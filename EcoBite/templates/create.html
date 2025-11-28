@@ -1,31 +1,117 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Post - EcoBite</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • Share Food</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
 </head>
 <body>
-  <div class="nav">
-    <h1>🌱 EcoBite</h1>
-    <a href="{{ url_for('home') }}" class="btn-secondary">Back to Home</a>
+  <div class="app">
+    {% include 'shared-sidebar.html' %}
+
+    <main>
+      <div class="header">
+        <div>
+          <h2>Share Food</h2>
+          <p>Help reduce waste and feed your community 🌱</p>
+        </div>
+      </div>
+
+      <section class="panel">
+        <h3 style="margin:0 0 16px 0; font-size:20px">Post Your Food</h3>
+        <form class="form" id="createForm" action="{{ url_for('create') }}" method="post" enctype="multipart/form-data">
+          <div>
+            <label>What are you sharing? *</label>
+            <textarea name="description" placeholder="e.g., 2 pizza slices, leftover pasta, fresh fruit..." required></textarea>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Category *</label>
+              <select name="category" required>
+                <option value="Other">Other</option>
+                <option value="Meals">Meals</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Beverages">Beverages</option>
+                <option value="Baked Goods">Baked Goods</option>
+                <option value="Fruits">Fruits</option>
+              </select>
+            </div>
+            <div>
+              <label>Quantity</label>
+              <input name="qty" placeholder="e.g., 2 slices, 1 bowl, 500g..." />
+            </div>
+          </div>
+
+          <div>
+            <label>Dietary Information</label>
+            <div class="checks">
+              <label class="chk">
+                <input type="checkbox" name="diet" value="Vegetarian" />
+                <span>Vegetarian</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="diet" value="Vegan" />
+                <span>Vegan</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="diet" value="Gluten-Free" />
+                <span>Gluten-Free</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="diet" value="Dairy-Free" />
+                <span>Dairy-Free</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="diet" value="Nut-Free" />
+                <span>Nut-Free</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="diet" value="Halal" />
+                <span>Halal</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="diet" value="Kosher" />
+                <span>Kosher</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label>Location *</label>
+            <input name="location" placeholder="e.g., Dorm A, Library Cafe, Student Center..." required />
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Expiry Time *</label>
+              <input type="datetime-local" name="expiry_time" required />
+              <small style="color:var(--muted); font-size:12px; margin-top:4px; display:block">When will this food no longer be available?</small>
+            </div>
+            <div>
+              <label>Photo (optional but recommended)</label>
+              <input type="file" name="photo" accept="image/*" />
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:8px">
+            <button class="btn ghost" type="button" onclick="history.back()">Cancel</button>
+            <button class="btn primary" type="submit">Post Food ↗</button>
+          </div>
+        </form>
+      </section>
+    </main>
   </div>
 
-  <div class="form-container">
-    <h2>Create a Food Post</h2>
-    <form method="POST" action="{{ url_for('create') }}" enctype="multipart/form-data">
-      <label for="description">Description</label>
-      <input type="text" id="description" name="description" placeholder="e.g. 2 pizza slices" required>
-
-      <label for="expiry_time">Expiry Time (minutes)</label>
-      <input type="number" id="expiry_time" name="expiry_time" placeholder="20" required>
-
-      <label for="photo">Upload Photo</label>
-      <input type="file" id="photo" name="photo">
-
-      <button type="submit" class="btn-primary">Post</button>
-    </form>
-  </div>
+  <script type="module">
+    import { bindCreate, navActivate } from "{{ url_for('static', filename='js/app.js') }}";
+    window.addEventListener('DOMContentLoaded', () => {
+      bindCreate?.();
+      navActivate?.('create');
+    });
+  </script>
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </body>
 </html>

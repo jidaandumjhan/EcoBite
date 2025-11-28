@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EcoBite • My Claims</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
+</head>
+<body>
+  <div class="app">
+    {% include 'shared-sidebar.html' %}
+
+    <main>
+      <div class="header">
+        <div>
+          <h2>My Claims</h2>
+          <p>Items you’ve claimed</p>
+        </div>
+      </div>
+
+      <section class="panel">
+        <h3>Active</h3>
+        <div id="claimsActive" class="grid" style="margin-top:12px"></div>
+      </section>
+
+      <section class="panel" style="margin-top:14px">
+        <h3>History</h3>
+        <div id="claimsHistory" class="grid" style="margin-top:12px"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderClaims, navActivate } from "{{ url_for('static', filename='js/app.js') }}";
+    window.addEventListener('DOMContentLoaded', () => {
+      renderClaims?.();
+      navActivate?.('claims');
+    });
+  </script>
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+</body>
+</html>

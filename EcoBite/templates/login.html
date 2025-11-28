@@ -1,40 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - EcoBite</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoBite • Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
 </head>
 <body>
-  <div class="form-container">
-    <h2>Login</h2>
-
-    <!-- 🔹 Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flash-messages">
-          {% for category, message in messages %}
-            <div class="flash {{ category }}">{{ message }}</div>
-          {% endfor %}
+  <div style="min-height:100vh; display:grid; place-items:center; padding:24px; background:radial-gradient(1200px 600px at 70% -10%, #eaf9f0, transparent), radial-gradient(900px 500px at -10% 110%, #ecf9ef, transparent), var(--bg)">
+    <div style="max-width:480px; width:100%; background:var(--panel); border-radius:24px; box-shadow:0 20px 40px rgba(20, 83, 45, .12); padding:40px">
+      <!-- Brand Section -->
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:32px; padding-bottom:24px; border-bottom:2px solid var(--brand-soft)">
+        <div style="width:56px; height:56px; border-radius:16px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); display:grid; place-items:center; color:white; font-size:28px; font-weight:700; box-shadow:0 8px 20px rgba(28,164,74,.3)">
+          🌿
         </div>
-      {% endif %}
-    {% endwith %}
+        <div>
+          <h1 style="margin:0; font-size:28px; color:var(--text); letter-spacing:-0.5px">EcoBite</h1>
+          <p style="margin:4px 0 0; font-size:14px; color:var(--muted)">Share. Save. Sustain.</p>
+        </div>
+      </div>
 
-    <!-- 🔹 Login Form -->
-    <form method="POST" action="{{ url_for('login_post') }}">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      <h2 style="margin:0 0 8px; font-size:26px; color:var(--text)">Welcome Back!</h2>
+      <p style="margin:0 0 28px; color:var(--muted); font-size:15px">Sign in to continue reducing food waste 🌱</p>
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div style="margin-bottom:20px">
+            {% for category, message in messages %}
+              <div style="padding:12px 16px; border-radius:12px; margin-bottom:8px; font-size:14px; 
+                  {% if category == 'error' %}background:#fee; border:1px solid #fcc; color:#c33{% elif category == 'success' %}background:#efe; border:1px solid #cfc; color:#3c3{% else %}background:#eef; border:1px solid #ccf; color:#33c{% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
 
-      <button type="submit" class="btn-primary">Login</button>
-    </form>
+      <form action="{{ url_for('login_post') }}" method="post" style="display:grid; gap:20px">
+        <div>
+          <label style="display:block; margin-bottom:8px; font-weight:600; color:var(--text); font-size:14px">Email Address</label>
+          <input name="email" type="email" required placeholder="you@example.com" 
+                 style="width:100%; padding:14px 16px; font-size:15px; border:2px solid #e6efe8; border-radius:14px; outline:none; background:white; transition:all .2s"
+                 onfocus="this.style.borderColor='var(--brand)'; this.style.boxShadow='0 0 0 4px rgba(28,164,74,.1)'"
+                 onblur="this.style.borderColor='#e6efe8'; this.style.boxShadow='none'">
+        </div>
+        <div>
+          <label style="display:block; margin-bottom:8px; font-weight:600; color:var(--text); font-size:14px">Password</label>
+          <input name="password" type="password" required placeholder="Enter your password" 
+                 style="width:100%; padding:14px 16px; font-size:15px; border:2px solid #e6efe8; border-radius:14px; outline:none; background:white; transition:all .2s"
+                 onfocus="this.style.borderColor='var(--brand)'; this.style.boxShadow='0 0 0 4px rgba(28,164,74,.1)'"
+                 onblur="this.style.borderColor='#e6efe8'; this.style.boxShadow='none'">
+        </div>
+        <button type="submit" 
+                style="width:100%; padding:16px; font-size:16px; font-weight:700; background:var(--brand); color:white; border:none; border-radius:14px; cursor:pointer; transition:all .2s; box-shadow:0 8px 20px rgba(28,164,74,.25)"
+                onmouseover="this.style.background='var(--brand-2)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 28px rgba(28,164,74,.3)'"
+                onmouseout="this.style.background='var(--brand)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(28,164,74,.25)'">
+          Sign In →
+        </button>
+      </form>
 
-    <p style="margin-top: 1rem;">Don’t have an account?  
-      <a href="{{ url_for('signup') }}">Sign up here</a>
-    </p>
+      <div style="margin-top:24px; padding-top:24px; border-top:2px solid var(--brand-soft); text-align:center">
+        <p style="margin:0; color:var(--muted); font-size:14px">
+          Don't have an account?
+          <a href="{{ url_for('signup') }}" style="color:var(--brand); font-weight:600; text-decoration:none; margin-left:4px">Sign up</a>
+        </p>
+      </div>
+    </div>
   </div>
 </body>
 </html>
