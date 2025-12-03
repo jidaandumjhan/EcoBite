@@ -1,12 +1,14 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EcoBite • Food Feed</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
   <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
 </head>
+
 <body>
   <div class="app">
     {% include 'shared-sidebar.html' %}
@@ -14,7 +16,7 @@
     <main>
       <div class="header">
         <div>
-          <h2>Food Feed</h2>
+          <h2>✨ Food Feed</h2>
           <p>Discover and share free food with your campus community 🌍</p>
         </div>
       </div>
@@ -22,76 +24,125 @@
       <!-- Stats row -->
       <section class="stats">
         <div class="stat">
-          <h4>📦 Available Now</h4>
-          <div class="big" id="stAvailable">0</div>
+          <div class="stat-icon">📦</div>
+          <div class="stat-content">
+            <div class="big" id="stAvailable">0</div>
+            <h4>Available Now</h4>
+          </div>
         </div>
         <div class="stat">
-          <h4>👥 Successfully Shared</h4>
-          <div class="big" id="stShared">0</div>
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <div class="big" id="stShared">0</div>
+            <h4>Successfully Shared</h4>
+          </div>
         </div>
         <div class="stat">
-          <h4>📊 Total Posts</h4>
-          <div class="big" id="stTotal">0</div>
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <div class="big" id="stTotal">0</div>
+            <h4>Total Posts</h4>
+          </div>
         </div>
         <div class="stat">
-          <h4>🌿 Food Waste Prevented</h4>
-          <div class="big" id="stWaste">0kg</div>
+          <div class="stat-icon">🌿</div>
+          <div class="stat-content">
+            <div class="big" id="stWaste">0kg</div>
+            <h4>Food Waste Prevented</h4>
+          </div>
         </div>
       </section>
 
       <!-- Toolbar / filters -->
-      <div class="toolbar">
-        <div class="tabs">
-          <button class="tab active" data-scope="available">⭐ Available</button>
-          <button class="tab" data-scope="claimed">🏆 Claimed</button>
-          <button class="tab" data-scope="expired">⏰ Expired</button>
+      <div class="toolbar-stack">
+        <div class="tabs-row">
+          <div class="tabs">
+            <button class="tab active" data-scope="available">⭐ Available</button>
+            <button class="tab" data-scope="claimed">🏆 Claimed</button>
+            <button class="tab" data-scope="expired">⏰ Expired</button>
+          </div>
         </div>
-        <input class="input" id="search" placeholder="🔍 Search for food (e.g., pizza, salad, cookies…)"/>
-        <select class="select" id="type">
-          <option value="all">All Types</option>
-          <option value="Meals">Meals</option>
-          <option value="Snacks">Snacks</option>
-          <option value="Beverages">Beverages</option>
-          <option value="Baked Goods">Baked Goods</option>
-          <option value="Fruits">Fruits</option>
-          <option value="Other">Other</option>
-        </select>
-        <select class="select" id="sort">
-          <option value="new">Newest First</option>
-          <option value="near">Closest to Me</option>
-        </select>
-        <button class="chip" id="dietBtn" style="position:relative">🥒 Dietary</button>
-        <div id="dietPopup" class="diet-popup" style="display:none">
-          <strong>Dietary Preferences</strong>
-          <div class="checks" style="margin-top:12px; flex-direction:column; gap:8px">
-            <label class="chk">
-              <input type="checkbox" name="dietFilter" value="Vegetarian" />
-              <span>🥬 Vegetarian</span>
-            </label>
-            <label class="chk">
-              <input type="checkbox" name="dietFilter" value="Vegan" />
-              <span>🌱 Vegan</span>
-            </label>
-            <label class="chk">
-              <input type="checkbox" name="dietFilter" value="Gluten-Free" />
-              <span>🌾 Gluten-Free</span>
-            </label>
-            <label class="chk">
-              <input type="checkbox" name="dietFilter" value="Dairy-Free" />
-              <span>🥛 Dairy-Free</span>
-            </label>
-            <label class="chk">
-              <input type="checkbox" name="dietFilter" value="Nut-Free" />
-              <span>🥜 Nut-Free</span>
-            </label>
-            <label class="chk">
-              <input type="checkbox" name="dietFilter" value="Halal" />
-              <span>🌙 Halal</span>
-            </label>
-            <label class="chk">
-              <input type="checkbox" name="dietFilter" value="Kosher" />
-              <span>✡️ Kosher</span>
-            </label>
+
+        <div class="search-row">
+          <input class="input" id="search" placeholder="🔍 Search for food (e.g., pizza, salad, cookies…)" />
+        </div>
+
+        <div class="filters-row">
+          <!-- Type Dropdown -->
+          <div class="custom-select" id="typeDropdown">
+            <button class="select-trigger">
+              <span class="trigger-text">All Types</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="select-options">
+              <div class="option selected" data-value="all">All Types</div>
+              <div class="option" data-value="Meals">Meals</div>
+              <div class="option" data-value="Snacks">Snacks</div>
+              <div class="option" data-value="Beverages">Beverages</div>
+              <div class="option" data-value="Baked Goods">Baked Goods</div>
+              <div class="option" data-value="Fruits">Fruits</div>
+              <div class="option" data-value="Other">Other</div>
+            </div>
+            <select id="type" style="display:none">
+              <option value="all">All Types</option>
+              <option value="Meals">Meals</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Baked Goods">Baked Goods</option>
+              <option value="Fruits">Fruits</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <!-- Sort Dropdown -->
+          <div class="custom-select" id="sortDropdown">
+            <button class="select-trigger">
+              <span class="trigger-text">Newest First</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="select-options">
+              <div class="option selected" data-value="new">Newest First</div>
+              <div class="option" data-value="near">Closest to Me</div>
+            </div>
+            <select id="sort" style="display:none">
+              <option value="new">Newest First</option>
+              <option value="near">Closest to Me</option>
+            </select>
+          </div>
+
+          <button class="chip" id="dietBtn" style="position:relative">🥒 Dietary</button>
+          <div id="dietPopup" class="diet-popup" style="display:none">
+            <strong>Dietary Preferences</strong>
+            <div class="checks" style="margin-top:12px; flex-direction:column; gap:8px">
+              <label class="chk">
+                <input type="checkbox" name="dietFilter" value="Vegetarian" />
+                <span>🥬 Vegetarian</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="dietFilter" value="Vegan" />
+                <span>🌱 Vegan</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="dietFilter" value="Gluten-Free" />
+                <span>🌾 Gluten-Free</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="dietFilter" value="Dairy-Free" />
+                <span>🥛 Dairy-Free</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="dietFilter" value="Nut-Free" />
+                <span>🥜 Nut-Free</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="dietFilter" value="Halal" />
+                <span>🌙 Halal</span>
+              </label>
+              <label class="chk">
+                <input type="checkbox" name="dietFilter" value="Kosher" />
+                <span>✡️ Kosher</span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
@@ -118,4 +169,5 @@
   </script>
   <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </body>
+
 </html>
