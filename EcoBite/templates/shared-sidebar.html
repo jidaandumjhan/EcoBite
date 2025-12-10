@@ -10,12 +10,12 @@
 
   <!-- ===== Navigation ===== -->
   <nav class="nav">
-    <a href="{{ url_for('home') }}" data-nav="home">🏠 Home</a>
-    <a href="{{ url_for('create') }}" data-nav="create">🍱 Share Food</a>
-    <a href="{{ url_for('myposts') }}" data-nav="myposts">📦 My Posts</a>
-    <a href="{{ url_for('requests_page') }}" data-nav="requests">📬 My Requests</a>
+    <a href="{{ url_for('main.home') }}" data-nav="home">🏠 Home</a>
+    <a href="{{ url_for('posts.create') }}" data-nav="create">🍱 Share Food</a>
+    <a href="{{ url_for('posts.myposts') }}" data-nav="myposts">📦 My Posts</a>
+    <a href="{{ url_for('claims.requests_page') }}" data-nav="requests">📬 My Requests</a>
 
-    <a href="{{ url_for('profile') }}" data-nav="profile">👤 Profile</a>
+    <a href="{{ url_for('main.profile') }}" data-nav="profile">👤 Profile</a>
   </nav>
 
   <!-- ===== Impact Card ===== -->
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <form action="{{ url_for('logout') }}" method="post" style="margin-top:10px">
+    <form action="{{ url_for('auth.logout') }}" method="post" style="margin-top:10px">
       <button class="btn ghost" style="width:100%">🚪 Logout</button>
     </form>
   </div>

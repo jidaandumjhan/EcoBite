@@ -478,36 +478,72 @@ def api_food_posts():
 
     if request.method == "POST":
         if "user_id" not in session: return jsonify({"error": "Unauthorized"}), 401
-        data = request.get_json() or {}
+        
+        # Handle both JSON and Form Data
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form.to_dict() # Convert ImmutableMultiDict to dict
+            print(f"DEBUG: Received data: {data}")
+
         
         # Extract fields
         title = data.get("title", "").strip()
         desc = data.get("description", "").strip()
         category = data.get("category", "Other")
-        quantity = data.get("quantity", "")
+        quantity = data.get("quantity") or data.get("qty", "")
         weight = data.get("estimated_weight_kg", 0)
-        dietary = data.get("dietary_tags", [])
-        location = data.get("location_text", "").strip()
+        dietary = data.get("dietary_tags") or request.form.getlist("diet") or []
+        location = data.get("location_text") or data.get("location", "").strip()
         pickup_start = data.get("pickup_window_start")
         pickup_end = data.get("pickup_window_end")
-        expires_at = data.get("expires_at")
+        expires_at = data.get("expires_at") or data.get("expiry_time")
 
         if not title or not desc or not location or not expires_at:
-            return jsonify({"error": "Missing required fields"}), 400
+            missing = []
+            if not title: missing.append("title")
+            if not desc: missing.append("description")
+            if not location: missing.append("location")
+            if not expires_at: missing.append("expires_at")
+            return jsonify({"error": f"Missing required fields: {', '.join(missing)}"}), 400
 
         try:
             dietary_json = json.dumps(dietary)
             
+            # Handle Image Upload
+            image_file = request.files.get("image") or request.files.get("photo")
+            image_url = None
+            if image_file and image_file.filename:
+                try:
+                    ext = os.path.splitext(image_file.filename)[1].lower()
+                    if ext in [".jpg", ".jpeg", ".png", ".webp"]:
+                        filename = f"{session['user_id']}_{int(datetime.now().timestamp())}{ext}"
+                        upload_path = os.path.join("static", "uploads", filename)
+                        os.makedirs(os.path.dirname(upload_path), exist_ok=True)
+                        image_file.save(upload_path)
+                        image_url = f"/static/uploads/{filename}"
+                except Exception as e:
+                    print(f"❌ Image upload error: {e}")
+
+            # Estimate weight if not provided
+            if not weight:
+                # Rough estimates in kg
+                estimates = {
+                    "Meals": 0.5, "Snacks": 0.2, "Beverages": 0.3,
+                    "Baked Goods": 0.1, "Fruits": 0.2, "Other": 0.5
+                }
+                weight = float(quantity) * estimates.get(category, 0.5) if quantity and quantity.replace('.','',1).isdigit() else estimates.get(category, 0.5)
+
             # Insert
             cur.execute("""
                 INSERT INTO posts (
                     user_id, title, description, category, quantity, 
                     estimated_weight_kg, dietary_json, location, 
-                    pickup_window_start, pickup_window_end, expires_at, status, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', NOW())
+                    pickup_window_start, pickup_window_end, expires_at, status, image_url, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', ?, NOW())
             """, (
                 session["user_id"], title, desc, category, quantity, 
-                weight, dietary_json, location, pickup_start, pickup_end, expires_at
+                weight, dietary_json, location, pickup_start, pickup_end, expires_at, image_url
             ))
             conn.commit()
             
@@ -548,7 +584,7 @@ def api_food_posts():
             params.extend([f"%{search}%", f"%{search}%"])
 
         # Category
-        if cat_filter and cat_filter != "All Types":
+        if cat_filter and cat_filter.lower() != "all types" and cat_filter.lower() != "all":
             query += " AND p.category = ?"
             params.append(cat_filter)
 
@@ -565,6 +601,7 @@ def api_food_posts():
 
         cur.execute(query, tuple(params))
         posts = dict_rows(cur.fetchall(), cur.description)
+        print(f"DEBUG: Returning {len(posts)} posts. First post image: {posts[0].get('image_url') if posts else 'None'}")
         return jsonify(posts)
 
     except Exception as e:

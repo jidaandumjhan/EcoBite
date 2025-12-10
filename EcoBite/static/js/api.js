@@ -23,10 +23,14 @@ export async function listPosts(params = {}) {
 }
 
 export async function createPost(data) {
+  const isFormData = data instanceof FormData;
+  const headers = isFormData ? {} : { 'Content-Type': 'application/json' };
+  const body = isFormData ? data : JSON.stringify(data);
+
   const res = await fetch(`${API_BASE}/food-posts`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    headers: headers,
+    body: body
   });
   if (!res.ok) {
     const err = await res.json();

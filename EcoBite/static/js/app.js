@@ -117,22 +117,40 @@ export function bindCreate() {
 
   const form = byId('createForm');
   if (form) {
+    // Image Preview
+    const fileInput = form.querySelector('input[type="file"]');
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const previewContainer = form.querySelector('.image-preview-container') || document.createElement('div');
+        if (!form.querySelector('.image-preview-container')) {
+          previewContainer.className = 'image-preview-container';
+          fileInput.parentNode.appendChild(previewContainer);
+        }
+        previewContainer.innerHTML = '';
+
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            const img = document.createElement('img');
+            img.src = evt.target.result;
+            img.style.maxWidth = '100%';
+            img.style.marginTop = '10px';
+            img.style.borderRadius = '8px';
+            previewContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(form);
-      const data = {
-        title: fd.get('description'),
-        description: fd.get('description'),
-        category: fd.get('category'),
-        quantity: fd.get('qty'),
-        dietary_tags: fd.getAll('diet'),
-        location_text: fd.get('location'),
-        pickup_window_end: fd.get('expiry_time'),
-        expires_at: fd.get('expiry_time')
-      };
+      // Ensure date is in correct format if needed, but FormData handles file automatically
 
       try {
-        await createPost(data);
+        await createPost(fd);
         window.location.href = '/';
       } catch (err) {
         alert('Failed to create post: ' + err.message);
@@ -246,7 +264,9 @@ export async function renderMyPosts() {
       <div class="mp-body">
         <div class="mp-info">
           <div class="mp-main-row">
-            <div class="mp-thumb">🍱</div>
+            <div class="mp-thumb">
+                ${p.image_url ? `<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">` : '🍱'}
+            </div>
             <div>
               <h5 class="mp-title">${p.title || p.description || 'Untitled'}</h5>
               <div class="mp-meta">
@@ -442,6 +462,30 @@ export async function renderProfile() {
 
       const achProgress = Math.min(10, Math.floor(stats.posts_created / 3) + Math.floor(stats.posts_shared / 2));
       set('#achProgress', `${achProgress}/10`);
+
+      // Update Achievements UI
+      const achievements = [
+        { id: 'first_share', title: 'First Share', icon: '🌱', unlocked: stats.posts_created >= 1 },
+        { id: 'helpful', title: 'Helpful Starter', icon: '⭐', unlocked: stats.posts_created >= 5 },
+        { id: 'eco_warrior', title: 'Eco Warrior', icon: '🌿', unlocked: stats.posts_created >= 10 },
+        { id: 'consistent', title: 'Consistent', icon: '📅', unlocked: stats.posts_created >= 20 },
+        { id: 'generous', title: 'Generous Soul', icon: '💚', unlocked: stats.posts_shared >= 5 },
+        { id: 'community', title: 'Community Hero', icon: '🏆', unlocked: stats.posts_shared >= 10 },
+        { id: 'saver', title: 'Mega Saver', icon: '💪', unlocked: stats.weight_shared_kg >= 5 },
+        { id: 'dedicated', title: 'Dedicated', icon: '🔥', unlocked: stats.weight_shared_kg >= 10 },
+        { id: 'champion', title: 'Food Champion', icon: '🥇', unlocked: stats.weight_shared_kg >= 20 },
+        { id: 'legendary', title: 'Legendary', icon: '🌟', unlocked: stats.weight_shared_kg >= 50 }
+      ];
+
+      const achGrid = document.querySelector('.ach-grid');
+      if (achGrid) {
+        achGrid.innerHTML = achievements.map(a => `
+              <div class="ach-item ${a.unlocked ? 'unlocked' : 'locked'}" title="${a.title}">
+                  ${a.icon}
+                  <span class="ach-tooltip">${a.title}</span>
+              </div>
+          `).join('');
+      }
     }
   } catch (e) { console.error("Profile stats error", e); }
 }
@@ -449,7 +493,22 @@ export async function renderProfile() {
 /* ---------- small UI helpers ---------- */
 function card(p, opts = {}) {
   const root = tag('div', 'card');
-  const t = tag('div', 'thumb', '🍱'); root.appendChild(t);
+  console.log('Rendering card for:', p.title, 'Image URL:', p.image_url, 'Type:', typeof p.image_url, 'Truthy:', !!p.image_url);
+
+  // Image or Thumb
+  if (p.image_url) {
+    const wrapper = tag('div', 'thumb');
+    wrapper.style.padding = '0';
+    wrapper.style.overflow = 'hidden';
+
+    const img = tag('img', 'card-image');
+    img.src = p.image_url;
+    wrapper.appendChild(img);
+    root.appendChild(wrapper);
+  } else {
+    const t = tag('div', 'thumb', '🍱'); root.appendChild(t);
+  }
+
   const body = tag('div'); root.appendChild(body);
 
   const title = tag('h5', null, p.title || p.description || '(no title)'); body.appendChild(title);

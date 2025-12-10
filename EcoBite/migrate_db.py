@@ -50,6 +50,13 @@ def migrate():
             if "Duplicate column" in str(e): print("pickup_window_end already exists")
             else: print(f"Error adding pickup_window_end: {e}")
 
+        try:
+            cursor.execute("ALTER TABLE posts ADD COLUMN image_url VARCHAR(255) DEFAULT NULL")
+            print("Added image_url to posts")
+        except mariadb.Error as e:
+            if "Duplicate column" in str(e): print("image_url already exists")
+            else: print(f"Error adding image_url: {e}")
+
         # Add columns to claims
         print("Migrating claims table...")
         try:

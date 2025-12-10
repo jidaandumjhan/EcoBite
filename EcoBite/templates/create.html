@@ -31,10 +31,13 @@
           <h3 style="margin:0; font-size:18px; color:var(--text)">Post Your Food</h3>
         </div>
         <div style="padding:24px">
-          <form class="form" id="createForm" action="{{ url_for('create') }}" method="post"
+          <form class="form" id="createForm" action="{{ url_for('posts.create') }}" method="post"
             enctype="multipart/form-data">
             <div>
-              <label>What are you sharing? *</label>
+              <label>Title *</label>
+              <input name="title" placeholder="e.g., Fresh Apples" required
+                style="margin-bottom: 12px; width: 100%; padding: 10px; border: 1px solid #e6efe8; border-radius: 8px;" />
+              <label>Description *</label>
               <textarea name="description" placeholder="e.g., 2 pizza slices, leftover pasta, fresh fruit..."
                 required></textarea>
             </div>
