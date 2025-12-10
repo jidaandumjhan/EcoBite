@@ -1,12 +1,18 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EcoBite • Share Food</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
   <link rel="icon" href="{{ url_for('static', filename='images/hero-image.png') }}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
+
 <body>
   <div class="app">
     {% include 'shared-sidebar.html' %}
@@ -19,88 +25,120 @@
         </div>
       </div>
 
-      <section class="panel">
-        <h3 style="margin:0 0 16px 0; font-size:20px">Post Your Food</h3>
-        <form class="form" id="createForm" action="{{ url_for('create') }}" method="post" enctype="multipart/form-data">
-          <div>
-            <label>What are you sharing? *</label>
-            <textarea name="description" placeholder="e.g., 2 pizza slices, leftover pasta, fresh fruit..." required></textarea>
-          </div>
-
-          <div class="row">
+      <section class="panel" style="padding:0; overflow:hidden">
+        <div class="panel-header"
+          style="background:var(--brand-soft); padding:20px 24px; border-bottom:1px solid #e6efe8">
+          <h3 style="margin:0; font-size:18px; color:var(--text)">Post Your Food</h3>
+        </div>
+        <div style="padding:24px">
+          <form class="form" id="createForm" action="{{ url_for('posts.create') }}" method="post"
+            enctype="multipart/form-data">
             <div>
-              <label>Category *</label>
-              <select name="category" required>
-                <option value="Other">Other</option>
-                <option value="Meals">Meals</option>
-                <option value="Snacks">Snacks</option>
-                <option value="Beverages">Beverages</option>
-                <option value="Baked Goods">Baked Goods</option>
-                <option value="Fruits">Fruits</option>
-              </select>
+              <label>Title *</label>
+              <input name="title" placeholder="e.g., Fresh Apples" required
+                style="margin-bottom: 12px; width: 100%; padding: 10px; border: 1px solid #e6efe8; border-radius: 8px;" />
+              <label>Description *</label>
+              <textarea name="description" placeholder="e.g., 2 pizza slices, leftover pasta, fresh fruit..."
+                required></textarea>
             </div>
+
+            <div class="row">
+              <div>
+                <label>Category *</label>
+                <!-- Custom Select for Category -->
+                <div class="custom-select" id="catDropdown">
+                  <button class="select-trigger" type="button">
+                    <span class="trigger-text">🍽️ Other</span>
+                    <span class="arrow">▼</span>
+                  </button>
+                  <div class="select-options">
+                    <div class="option selected" data-value="Other">🍽️ Other</div>
+                    <div class="option" data-value="Meals">🍱 Meals</div>
+                    <div class="option" data-value="Snacks">🥨 Snacks</div>
+                    <div class="option" data-value="Beverages">🥤 Beverages</div>
+                    <div class="option" data-value="Baked Goods">🥐 Baked Goods</div>
+                    <div class="option" data-value="Fruits">🍎 Fruits</div>
+                  </div>
+                  <select name="category" required style="display:none">
+                    <option value="Other">Other</option>
+                    <option value="Meals">Meals</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Baked Goods">Baked Goods</option>
+                    <option value="Fruits">Fruits</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label>Quantity</label>
+                <input name="qty" placeholder="e.g., 2 slices, 1 bowl, 500g..." />
+              </div>
+            </div>
+
             <div>
-              <label>Quantity</label>
-              <input name="qty" placeholder="e.g., 2 slices, 1 bowl, 500g..." />
+              <label>Dietary Information</label>
+              <div class="checks">
+                <label class="chk">
+                  <input type="checkbox" name="diet" value="Vegetarian" />
+                  <span>🥬 Vegetarian</span>
+                </label>
+                <label class="chk">
+                  <input type="checkbox" name="diet" value="Vegan" />
+                  <span>🌱 Vegan</span>
+                </label>
+                <label class="chk">
+                  <input type="checkbox" name="diet" value="Gluten-Free" />
+                  <span>🌾 Gluten-Free</span>
+                </label>
+                <label class="chk">
+                  <input type="checkbox" name="diet" value="Dairy-Free" />
+                  <span>🥛 Dairy-Free</span>
+                </label>
+                <label class="chk">
+                  <input type="checkbox" name="diet" value="Nut-Free" />
+                  <span>🥜 Nut-Free</span>
+                </label>
+                <label class="chk">
+                  <input type="checkbox" name="diet" value="Halal" />
+                  <span>🌙 Halal</span>
+                </label>
+                <label class="chk">
+                  <input type="checkbox" name="diet" value="Kosher" />
+                  <span>✡️ Kosher</span>
+                </label>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label>Dietary Information</label>
-            <div class="checks">
-              <label class="chk">
-                <input type="checkbox" name="diet" value="Vegetarian" />
-                <span>Vegetarian</span>
-              </label>
-              <label class="chk">
-                <input type="checkbox" name="diet" value="Vegan" />
-                <span>Vegan</span>
-              </label>
-              <label class="chk">
-                <input type="checkbox" name="diet" value="Gluten-Free" />
-                <span>Gluten-Free</span>
-              </label>
-              <label class="chk">
-                <input type="checkbox" name="diet" value="Dairy-Free" />
-                <span>Dairy-Free</span>
-              </label>
-              <label class="chk">
-                <input type="checkbox" name="diet" value="Nut-Free" />
-                <span>Nut-Free</span>
-              </label>
-              <label class="chk">
-                <input type="checkbox" name="diet" value="Halal" />
-                <span>Halal</span>
-              </label>
-              <label class="chk">
-                <input type="checkbox" name="diet" value="Kosher" />
-                <span>Kosher</span>
-              </label>
+            <div>
+              <label>Location *</label>
+              <div style="position:relative; margin-bottom:12px">
+                <input id="locationInput" name="location" placeholder="e.g., Dorm A, Library Cafe, Student Center..."
+                  required style="padding-right:40px" />
+                <span
+                  style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--brand); font-size:18px; cursor:pointer"
+                  id="locPin">📍</span>
+              </div>
+              <div id="map"></div>
             </div>
-          </div>
 
-          <div>
-            <label>Location *</label>
-            <input name="location" placeholder="e.g., Dorm A, Library Cafe, Student Center..." required />
-          </div>
-
-          <div class="row">
             <div>
               <label>Expiry Time *</label>
               <input type="datetime-local" name="expiry_time" required />
-              <small style="color:var(--muted); font-size:12px; margin-top:4px; display:block">When will this food no longer be available?</small>
+              <small style="color:var(--muted); font-size:12px; margin-top:4px; display:block">When will this food no
+                longer be available?</small>
             </div>
+
             <div>
               <label>Photo (optional but recommended)</label>
               <input type="file" name="photo" accept="image/*" />
             </div>
-          </div>
 
-          <div style="display:flex; gap:10px; margin-top:8px">
-            <button class="btn ghost" type="button" onclick="history.back()">Cancel</button>
-            <button class="btn primary" type="submit">Post Food ↗</button>
-          </div>
-        </form>
+            <div style="display:flex; gap:10px; margin-top:16px">
+              <button class="btn ghost" type="button" onclick="history.back()" style="flex:1">Cancel</button>
+              <button class="btn primary" type="submit" style="flex:1">Post Food 📤</button>
+            </div>
+          </form>
+        </div>
       </section>
     </main>
   </div>
@@ -114,4 +152,5 @@
   </script>
   <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </body>
+
 </html>
