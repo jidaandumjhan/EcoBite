@@ -92,24 +92,33 @@ Before running the application, ensure you have the following installed:
 
 ```
 EcoBite/
-├── app/                 # Application source code
-│   ├── blueprints/      # Flask blueprints (routes)
-│   │   ├── api.py       # API endpoints
-│   │   ├── auth.py      # Authentication routes
-│   │   ├── claims.py    # Claims management
-│   │   ├── main.py      # Main site routes (landing, etc)
+├── app/                 # Application core
+│   ├── blueprints/      # Modular route handlers
+│   │   ├── api.py       # REST API endpoints
+│   │   ├── auth.py      # Authentication (Login/Signup)
+│   │   ├── claims.py    # Claim logic and processing
+│   │   ├── main.py      # Core UI routes (Home, Profile)
 │   │   └── posts.py     # Food post management
-│   ├── db.py            # Database connection logic
-│   ├── utils.py         # Helper functions
-│   └── __init__.py      # App factory
-├── db/                  # Database scripts
+│   ├── __init__.py      # App factory and initialization
+│   ├── config.py        # Environment configuration
+│   ├── db.py            # Database connection handler
+│   └── utils.py         # Shared utility functions
+├── db/                  # Database resources
+│   └── schema.sql       # Database schema definition
+├── scripts/             # Maintenance scripts
+│   ├── inspect_db.py    # Database inspection tool
+│   └── migrate_db.py    # Database migration utility
 ├── static/              # Static assets (CSS, JS, Images)
-├── templates/           # HTML templates
-├── uploads/             # User uploaded content
-├── .env.example         # Example environment variables
+├── templates/           # HTML/Jinja2 templates
+├── tests/               # Quality assurance
+│   ├── test_api.py      # API integration tests
+│   └── verify_app.py    # Startup verification script
+├── uploads/             # User-uploaded content directory
+├── .env.example         # Template for environment variables
+├── .gitignore           # Git ignore rules
+├── README.md            # Project documentation
 ├── requirements.txt     # Python dependencies
-├── run.py               # Application entry point
-└── README.md            # Project documentation
+└── run.py               # Application entry point
 ```
 
 ## Contributing
